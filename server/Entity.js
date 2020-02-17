@@ -1,18 +1,14 @@
-export default class Entity {
-  constructor() {
-    this.x = 250;
-    this.y = 250;
-    this.id = "";
-    this.speedX = 0;
-    this.speedY = 0;
-  }
-
-  updatePosition() {
-    this.x += this.speedX;
-    this.y += this.speedY;
+class Entity {
+  constructor(id, x, y) {
+    this.x = x;
+    this.y = y;
+    this.id = id;
   }
 
   update() {
     this.updatePosition();
   }
 }
+
+
+module.exports = Entity;

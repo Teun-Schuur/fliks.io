@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const serv = require("http").Server(app);
+const io = require("socket.io")(serv, {});
+const Player = require("./server/Player.js");
+const Entity = require("./server/Entity.js");
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/client/index.html");
@@ -14,34 +17,11 @@ console.log("Server started.");
 var SOCKET_LIST = {};
 var PLAYER_LIST = {};
 
-var Player = function(id) {
-  var self = {
-    x: 250,
-    y: 250,
-    id: id,
-    number: "" + Math.floor(10 * Math.random()),
-    pressingRight: false,
-    pressingLeft: false,
-    pressingUp: false,
-    pressingDown: false,
-    maxSpeed: 10
-  };
-
-  self.updatePosition = function() {
-    if (self.pressingRight) self.x += self.maxSpeed;
-    if (self.pressingLeft) self.x -= self.maxSpeed;
-    if (self.pressingUp) self.y -= self.maxSpeed;
-    if (self.pressingDown) self.y += self.maxSpeed;
-  };
-
-  return self;
-};
-
-const io = require("socket.io")(serv, {});
 io.on("connection", function(socket) {
   socket.id = Math.random();
+  console.log("New connection: ", socket.id)
   SOCKET_LIST[socket.id] = socket;
-  var player = Player(socket.id);
+  var player = new Player(socket.id);
   PLAYER_LIST[socket.id] = player;
 
   socket.on("disconnect", function() {
@@ -65,7 +45,8 @@ setInterval(function() {
     pack.push({
       x: player.x,
       y: player.y,
-      number: player.number
+      number: player.number,
+      angle: player.angle
     });
   }
   for (var socket_id in SOCKET_LIST) {

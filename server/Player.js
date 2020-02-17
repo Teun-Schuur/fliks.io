@@ -1,22 +1,33 @@
-import Entity from "/server/Entity.js";
+const Entity = require("./server/Entity.js");
 
-export default class Player extends Entity {
+class Player extends Entity {
   constructor(id) {
-    this.x = 250;
-    this.y = 250;
-    this.id = id;
+    super(id, 250, 250)
     this.number = "" + Math.floor(10 * Math.random());
     this.pressingRight = false;
     this.pressingLeft = false;
     this.pressingUp = false;
     this.pressingDown = false;
-    this.maxSpeed = 10;
+    this.maxSpeed = 2;
+    this.xSpeed = 0;
+    this.ySpeed = 0;
+    this.angle = 0;
   }
 
   updatePosition() {
-    if (this.pressingRight) this.x += this.maxSpeed;
-    if (this.pressingLeft) this.x -= this.maxSpeed;
-    if (this.pressingUp) this.y -= this.maxSpeed;
-    if (this.pressingDown) this.y += this.maxSpeed;
+    if (this.pressingRight) this.xSpeed += this.maxSpeed;
+    if (this.pressingLeft) this.xSpeed -= this.maxSpeed;
+    if (this.pressingUp) this.ySpeed -= this.maxSpeed;
+    if (this.pressingDown) this.ySpeed += this.maxSpeed;
+    this.ySpeed *= 0.9;
+    this.xSpeed *= 0.9;
+    this.y += this.ySpeed;
+    this.x += this.xSpeed;
+    this.angle = Math.atan(this.ySpeed / this.xSpeed);
+    if (this.xSpeed < 0) {
+      this.angle += Math.PI;
+    }
   }
 }
+
+module.exports = Player;
