@@ -1,4 +1,4 @@
-const Consts = require("./Consts");
+const Consts = require("../client/shared/Consts");
 
 
 class Food {

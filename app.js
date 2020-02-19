@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const serv = require("http").Server(app);
 const io = require("socket.io")(serv, {});
-const Constants = require("./shared/constants.js");
+const Consts = require("./client/shared/consts.js");
+const Game = require("./server/game.js");
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/client/index.html");
@@ -16,31 +17,32 @@ console.log("Server started.");
 
 io.on("connection", function(socket) {
   console.log("New connection: ", socket.id)
+  addNewUser(socket);
   socket.on('disconnect', function() {
     console.log(socket.id + ' has disconnected from the chat.');
+    onDisconnect(socket)
   });
-  socket.on('join', function(name) {
-    socket.name = name;
-    console.log(socket.name + ' joined the chat.');
-  });
+  socket.on("returnUpdate", (data) => {
+    returnUpdate(data);
+  })
 });
 
 
-// const game = new Game();
+const game = new Game();
 
-// function joinGame(username) {
-//   game.addPlayer(this, username);
-// }
-//
-// function handleInput(dir) {
-//   game.handleInput(this, dir);
-// }
-//
-// function onDisconnect() {
-//   game.removePlayer(this);
-// }
+function addNewUser(socket) {
+  game.initNewPlayer(socket)
+}
 
-//
-// setInterval(function() {
-//   game.update();
-// }, 1000 / 25);
+function returnUpdate(data) {
+  game.onReturnUpdate(data.id, data);
+}
+
+function onDisconnect(socket) {
+  game.onDisconnect(socket.id);
+}
+
+
+setInterval(function() {
+  game.update();
+}, 1000 / 25);

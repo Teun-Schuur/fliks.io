@@ -17,10 +17,14 @@ function clearScreen() {
 }
 
 function fill(r, g, b) {
-  if (g != null && b != null) {
-    ctx.fillStyle = "rgb(" + r + ", " + g + ", " + b + ")";
+  if (Array.isArray(r)) {
+    ctx.fillStyle = "rgb(" + r[0] + ", " + r[1] + ", " + r[2] + ")";
   } else {
-    ctx.fillStyle = "rgb(" + r + ", " + r + ", " + r + ")";
+    if (g != null && b != null) {
+      ctx.fillStyle = "rgb(" + r + ", " + g + ", " + b + ")";
+    } else {
+      ctx.fillStyle = "rgb(" + r + ", " + r + ", " + r + ")";
+    }
   }
 }
 
@@ -40,4 +44,17 @@ function drawTriangle(PosX, PosY, radius, rotate) {
   ctx.fill();
   ctx.setTransform(1, 0, 0, 1, 0, 0); // reset the transform
   return true;
+}
+
+
+function circle(x, y, r) {
+  ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+}
+
+function lineWeight(width) {
+  ctx.lineWidth = width;
+}
+
+function ID() {
+  return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
 }

@@ -4,9 +4,36 @@ let WIDTH = NaN;
 let HEIGHT = NaN;
 resizeCanvas();
 const socket = io();
-console.log(socket, socket.id)
 const game = new Game(socket);
 
-// socket.on("newLocations", function(data) {
-//
-// });
+socket.on("init", (id) => {
+  game.init(id);
+});
+
+socket.on("update", function(data) {
+  game.update(data);
+});
+
+
+
+document.onkeydown = function(event) {
+  if (event.keyCode === 68)
+    game.player.pressingRight = true;
+  else if (event.keyCode === 83)
+    game.player.pressingDown = true;
+  else if (event.keyCode === 65)
+    game.player.pressingLeft = true;
+  else if (event.keyCode === 87)
+    game.player.pressingUp = true;
+};
+
+document.onkeyup = function(event) {
+  if (event.keyCode === 68)
+    game.player.pressingRight = false;
+  else if (event.keyCode === 83)
+    game.player.pressingDown = false;
+  else if (event.keyCode === 65)
+    game.player.pressingLeft = false;
+  else if (event.keyCode === 87)
+    game.player.pressingUp = false;
+};

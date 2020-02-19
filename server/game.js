@@ -1,4 +1,4 @@
-const Consts = require("./Consts");
+const Consts = require("../client/shared/Consts");
 const Food = require("./Food")
 const Obstical = require("./Obstical")
 const Bullet = require("./Bullet")
@@ -12,13 +12,22 @@ class Game {
     this.obsticals = {};
   }
 
+  initNewPlayer(socket) {
+    this.sockets.set(socket.id, socket);
+    socket.emit("init", socket.id)
+  }
+
+  update() {
+    this.sendPackage();
+  }
+
   onNewConnection(socket) {
     this.sockets.set(socket.id, socket)
   }
 
   onDisconnect(id) {
     this.sockets.delete(id);
-    players_pack.delete(id);
+    this.players_pack.delete(id);
   }
 
   onRemove(object, id) {
@@ -32,7 +41,8 @@ class Game {
   }
 
   onReturnUpdate(id, data) {
-    players_pack.set(id, data);
+    this.players_pack.set(id, data);
+    // console.log(data)
   }
 
   sendPackage() {
@@ -53,11 +63,14 @@ class Game {
     for (var [id, data] of this.players_pack) {
       player_pack.push(data);
     }
-    pack["PLAYERS"] = this.players_pack;
-    pack["FOODS"] = food_pack;
-    pack["bullets"] = buls_pack;
-    pack["obsticals"] = obstical_pack;
+    pack = {
+      PLAYERS: Array.from(this.players_pack.values()),
+      FOODS: food_pack,
+      BULLETS: buls_pack,
+      OBSITCALS: obstical_pack
+    }
     for (let [id, socket] of this.sockets) {
+      console.log(pack)
       socket.emit("update", pack);
     }
   }

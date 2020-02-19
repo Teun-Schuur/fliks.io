@@ -1,4 +1,4 @@
-const Consts = require("./Consts");
+const Consts = require("../client/shared/Consts");
 
 class Bullet {
   constructor(id, from_id, x, y, xSpeed, ySpeed) {

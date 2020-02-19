@@ -1,9 +1,8 @@
 class Player {
-  constructor(id) {
-    this.id = id;
+  constructor() {
+    this.id = null;
     this.x = WIDTH / 2;
     this.y = HEIGHT / 2;
-    this.number = "" + Math.floor(10 * Math.random());
     this.pressingRight = false;
     this.pressingLeft = false;
     this.pressingUp = false;
@@ -12,6 +11,7 @@ class Player {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.angle = 0;
+    this.size = 20;
   }
 
   updatePosition() {
@@ -26,6 +26,16 @@ class Player {
     this.angle = Math.atan(this.ySpeed / this.xSpeed);
     if (this.xSpeed < 0) {
       this.angle += Math.PI;
+    }
+  }
+
+  getPackage() {
+    return {
+      id: this.id,
+      x: this.x,
+      y: this.y,
+      angle: this.angle,
+      size: this.size
     }
   }
 }
