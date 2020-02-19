@@ -1,6 +1,6 @@
 const consts = Object.freeze({
-  MAP_WIDTH: 1000,
-  MAP_HEIGHT: 1500,
+  MAP_WIDTH: 3000,
+  MAP_HEIGHT: 3000,
 
   FOOD_RADIUS: 5,
 

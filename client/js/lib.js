@@ -29,6 +29,7 @@ function fill(r, g, b) {
 }
 
 function drawTriangle(PosX, PosY, radius, rotate) {
+  ctx.save();
   ctx.setTransform(1, 0, 0, 1, PosX, PosY); // Set position
   ctx.rotate(rotate); // set rotation in radians
   ctx.beginPath();
@@ -42,8 +43,15 @@ function drawTriangle(PosX, PosY, radius, rotate) {
 
   ctx.closePath();
   ctx.fill();
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // reset the transform
+  // ctx.setTransform(1, 0, 0, 1, 0, 0); // reset the transform
+  ctx.restore()
   return true;
+}
+
+function clamp(value, min, max) {
+  if (value < min) return min;
+  else if (value > max) return max;
+  return value;
 }
 
 
@@ -53,6 +61,10 @@ function circle(x, y, r) {
 
 function lineWeight(width) {
   ctx.lineWidth = width;
+}
+
+function transform(x, y) {
+  ctx.setTransform(1, 0, 0, 1, x, y);
 }
 
 function ID() {

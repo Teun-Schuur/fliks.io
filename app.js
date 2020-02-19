@@ -45,4 +45,4 @@ function onDisconnect(socket) {
 
 setInterval(function() {
   game.update();
-}, 1000 / 25);
+}, 1000 / 30);

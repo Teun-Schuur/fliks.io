@@ -1,8 +1,8 @@
 class Player {
   constructor() {
     this.id = null;
-    this.x = WIDTH / 2;
-    this.y = HEIGHT / 2;
+    this.x = consts.MAP_WIDTH / 2;
+    this.y = consts.MAP_HEIGHT / 2;
     this.pressingRight = false;
     this.pressingLeft = false;
     this.pressingUp = false;
@@ -21,11 +21,23 @@ class Player {
     if (this.pressingDown) this.ySpeed += this.maxSpeed;
     this.ySpeed *= 0.9;
     this.xSpeed *= 0.9;
+    if (Math.abs(this.ySpeed) < 0.01) {
+      this.ySpeed = 0;
+    }
+    if (Math.abs(this.xSpeed) < 0.01) {
+      this.xSpeed = 0;
+    }
     this.y += this.ySpeed;
     this.x += this.xSpeed;
-    this.angle = Math.atan(this.ySpeed / this.xSpeed);
-    if (this.xSpeed < 0) {
-      this.angle += Math.PI;
+    if (this.ySpeed !== 0 && this.xSpeed !== 0) {
+      this.angle = Math.atan(this.ySpeed / this.xSpeed);
+      if (this.xSpeed < 0) {
+        this.angle += Math.PI;
+      }
+    } else if (this.ySpeed === 0 && Math.abs(this.xSpeed) > 0.1) {
+      this.angle = this.xSpeed > 0 ? 0 : (Math.PI / 180) * 180;
+    } else if (this.xSpeed === 0 && Math.abs(this.ySpeed) > 0.1) {
+      this.angle = this.ySpeed > 0 ? (Math.PI / 180) * 90 : (Math.PI / 180) * 270;
     }
   }
 
