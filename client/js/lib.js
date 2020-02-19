@@ -1,4 +1,4 @@
-module.resizeCanvas = function(canvas) {
+function resizeCanvas() {
   canvas.width =
     window.innerWidth ||
     document.documentElement.clientWidth ||
@@ -7,14 +7,16 @@ module.resizeCanvas = function(canvas) {
     window.innerHeight ||
     document.documentElement.clientHeight ||
     document.body.clientHeight;
+  WIDTH = canvas.width;
+  HEIGHT = canvas.height;
 }
 
-module.clearScreen = function(ctx) {
+function clearScreen() {
   fill(180)
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 }
 
-module.fill = function(ctx, r, g, b) {
+function fill(r, g, b) {
   if (g != null && b != null) {
     ctx.fillStyle = "rgb(" + r + ", " + g + ", " + b + ")";
   } else {
@@ -22,7 +24,7 @@ module.fill = function(ctx, r, g, b) {
   }
 }
 
-module.drawTriangle = function(ctx, PosX, PosY, radius, rotate) {
+function drawTriangle(PosX, PosY, radius, rotate) {
   ctx.setTransform(1, 0, 0, 1, PosX, PosY); // Set position
   ctx.rotate(rotate); // set rotation in radians
   ctx.beginPath();

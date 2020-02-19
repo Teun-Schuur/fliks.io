@@ -1,8 +1,8 @@
-const Entity = require("./Entity.js");
-
-class Player extends Entity {
+class Player {
   constructor(id) {
-    super(id, 250, 250)
+    this.id = id;
+    this.x = WIDTH / 2;
+    this.y = HEIGHT / 2;
     this.number = "" + Math.floor(10 * Math.random());
     this.pressingRight = false;
     this.pressingLeft = false;
@@ -29,5 +29,3 @@ class Player extends Entity {
     }
   }
 }
-
-module.exports = Player;
