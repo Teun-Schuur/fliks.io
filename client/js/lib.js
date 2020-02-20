@@ -54,9 +54,10 @@ function clamp(value, min, max) {
   return value;
 }
 
-
 function circle(x, y, r) {
+  ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+  ctx.fill();
 }
 
 function lineWeight(width) {
@@ -67,6 +68,6 @@ function transform(x, y) {
   ctx.setTransform(1, 0, 0, 1, x, y);
 }
 
-function ID() {
-  return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
+function rectPoint(x, y, w, h, px, py) {
+  return (px > x && px < x + w && py > y && py < y + h)
 }

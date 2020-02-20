@@ -25,10 +25,18 @@ io.on("connection", function(socket) {
   socket.on("returnUpdate", (data) => {
     returnUpdate(data);
   })
+  socket.on("RemoveId", (data) => {
+    console.log(data)
+    remove(data);
+  })
 });
 
 
 const game = new Game();
+
+function remove(data) {
+  game.onRemove(data[0], data[1]);
+}
 
 function addNewUser(socket) {
   game.initNewPlayer(socket)
@@ -45,4 +53,4 @@ function onDisconnect(socket) {
 
 setInterval(function() {
   game.update();
-}, 1000 / 30);
+}, 1000 / 25);

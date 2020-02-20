@@ -18,6 +18,18 @@ class Game {
   }
 
   update() {
+    if (Object.keys(this.foods).length < Consts.FOOD_RESPAN_RATE) {
+      if (Math.random() < Consts.FOOD_RESPAN_RATE / Object.keys(this.foods).length) {
+        let food = new Food(ID())
+        this.foods[food.id] = food;
+      }
+    } else {
+      for (let i = 0; i < Consts.FOOD_RESPAN_RATE; i++) {
+        let food = new Food(ID())
+        this.foods[food.id] = food;
+      }
+    }
+
     this.sendPackage();
   }
 
@@ -31,6 +43,7 @@ class Game {
   }
 
   onRemove(object, id) {
+    console.log("remove " + object + " with id of: " + id)
     if (object == "FOOD") {
       delete this.foods[id];
     } else if (object == "BULLET") {
@@ -70,10 +83,15 @@ class Game {
       OBSITCALS: obstical_pack
     }
     for (let [id, socket] of this.sockets) {
-      console.log(pack)
+      // console.log(pack.PLAYERS.length)
       socket.emit("update", pack);
     }
   }
+}
+
+
+function ID() {
+  return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
 }
 
 module.exports = Game;

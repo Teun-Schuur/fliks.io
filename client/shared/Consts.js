@@ -1,15 +1,24 @@
 const consts = Object.freeze({
-  MAP_WIDTH: 3000,
-  MAP_HEIGHT: 3000,
+  MAP_WIDTH: 4200,
+  MAP_HEIGHT: 4200,
+  BACKGROUND: [200, 200, 200],
 
-  FOOD_RADIUS: 5,
+  FOOD_RADIUS: 10,
+
+
+  PLAYER_SIZE: 33,
+  BEGIN_HP: 100,
+  FOOD_SCORE: 1,
+  FOOD_RESPAN_RATE: 0.03,
+
+
 
   COLORS: {
     bullet: [200, 200, 255],
     obstical: [200, 0, 210],
     player_self: [255, 0, 0],
     player_other: [10, 50, 200],
-    food: [100, 100, 100]
+    food: [255, 100, 0]
   },
 
 

@@ -11,7 +11,7 @@ class Player {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.angle = 0;
-    this.size = 20;
+    this.size = consts.PLAYER_SIZE;
   }
 
   updatePosition() {
@@ -19,6 +19,7 @@ class Player {
     if (this.pressingLeft) this.xSpeed -= this.maxSpeed;
     if (this.pressingUp) this.ySpeed -= this.maxSpeed;
     if (this.pressingDown) this.ySpeed += this.maxSpeed;
+
     this.ySpeed *= 0.9;
     this.xSpeed *= 0.9;
     if (Math.abs(this.ySpeed) < 0.01) {
