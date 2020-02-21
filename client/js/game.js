@@ -75,7 +75,7 @@ class Game {
         });
       }
       for (let o in this.obsticals) {
-        this.render_obstical(obs[o]);
+        this.render_obstical(obs[o])
       }
 
 

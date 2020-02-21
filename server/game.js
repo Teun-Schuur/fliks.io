@@ -1,7 +1,4 @@
 const Consts = require("../client/shared/Consts");
-// const Food = require("./Food")
-// const Obstical = require("./Obstical")
-// const Bullet = require("./Bullet")
 
 class Game {
   constructor() {
