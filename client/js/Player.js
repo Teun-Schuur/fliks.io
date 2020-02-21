@@ -7,18 +7,25 @@ class Player {
     this.pressingLeft = false;
     this.pressingUp = false;
     this.pressingDown = false;
+    this.pressingSpace = false;
     this.maxSpeed = 2;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.angle = 0;
     this.size = consts.PLAYER_SIZE;
+    this.frame = 0;
+    this.shoot = false;
   }
 
   updatePosition() {
+    if (this.pressingSpace && consts.PLAYER_SHOOTING_SPEED * 60 % this.frame === 0) {
+      this.shoot = true;
+    } else this.shoot = false;
     if (this.pressingRight) this.xSpeed += this.maxSpeed;
     if (this.pressingLeft) this.xSpeed -= this.maxSpeed;
     if (this.pressingUp) this.ySpeed -= this.maxSpeed;
     if (this.pressingDown) this.ySpeed += this.maxSpeed;
+    this.frame++;
 
     this.ySpeed *= 0.9;
     this.xSpeed *= 0.9;

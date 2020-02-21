@@ -4,9 +4,11 @@ class Game {
   constructor() {
     this.sockets = new Map();
     this.players_pack = new Map();
-    this.bullets = [];
-    this.foods = [];
-    this.obsticals = [];
+
+    this.pack = new Object();
+    this.pack.REMOVE = []; // id's
+    this.pack.ADD = []; // bullets, obsticals, food
+    this.pack.PLAYERS = []; // all the players info
   }
 
   initNewPlayer(socket) {
@@ -87,9 +89,5 @@ class Game {
   }
 }
 
-
-function ID() {
-  return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
-}
 
 module.exports = Game;

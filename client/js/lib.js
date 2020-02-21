@@ -71,3 +71,7 @@ function transform(x, y) {
 function rectPoint(x, y, w, h, px, py) {
   return (px > x && px < x + w && py > y && py < y + h)
 }
+
+function ID() {
+  return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
+}
