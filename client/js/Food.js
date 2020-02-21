@@ -1,8 +1,8 @@
 class Food {
   constructor(id, x, y) {
     this.id = id;
-    this.x = Math.random() * Consts.MAP_WIDTH;
-    this.y = Math.random() * Consts.MAP_HEIGHT;
+    this.x = Math.random() * consts.MAP_WIDTH;
+    this.y = Math.random() * consts.MAP_HEIGHT;
   }
 
 
@@ -14,6 +14,3 @@ class Food {
     }
   }
 }
-
-
-module.exports = Food;

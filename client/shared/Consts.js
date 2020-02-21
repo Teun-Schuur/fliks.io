@@ -7,7 +7,7 @@ const consts = Object.freeze({
 
 
   PLAYER_SIZE: 33,
-  PLAYER_SHOOTING_SPEED: 0.25
+  PLAYER_SHOOTING_SPEED: 0.25,
 
   BEGIN_HP: 100,
   FOOD_SCORE: 1,

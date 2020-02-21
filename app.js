@@ -43,7 +43,7 @@ function addNewUser(socket) {
 }
 
 function returnUpdate(data) {
-  game.onReturnUpdate(data.id, data);
+  game.onReturnUpdate(data[0], data[1]);
 }
 
 function onDisconnect(socket) {

@@ -6,8 +6,8 @@ resizeCanvas();
 const socket = io();
 const game = new Game(socket);
 
-socket.on("init", (id) => {
-  game.init(id);
+socket.on("init", (data) => {
+  game.init(data[0], data[1]);
 });
 
 socket.on("update", function(data) {
