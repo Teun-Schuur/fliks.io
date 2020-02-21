@@ -23,7 +23,7 @@ class Game {
     var players = data.PLAYERS; // [] of players
 
     if (toRemove.length > 0) {
-      console.log("removing: ", toRemove[0], this.foods[toRemove[0]])
+      console.log("removing: ", toRemove[0], this.bullets[toRemove[0]])
     }
 
     clearScreen(consts.BACKGROUND);
@@ -57,7 +57,10 @@ class Game {
     for (let f_id in this.foods) {
       let f = this.foods[f_id];
       if (rectPoint(this.player.x - this.player.size, this.player.y - this.player.size, this.player.size * 2, this.player.size * 2, f.x, f.y)) {
+        this.player.score++;
+        this.player.points++;
         pacage.REMOVE.push(f_id);
+        this.player.setHP(10)
       }
       this.render_food(f);
     }
@@ -69,18 +72,20 @@ class Game {
         this.player.id,
         this.player.x,
         this.player.y,
-        this.player.xSpeed,
-        this.player.ySpeed
+        this.player.angle
       );
       pacage.BULLET = bul.getPackage();
-      this.bullets[bul.id] = bul;
-
     }
     for (let b of toAdd.BULLETS) {
-      this.bullets[b.id] = new Bullet(b.id, b.from, b.x, b.y, b.xSpeed, b.ySpeed);
+      this.bullets[b.id] = new Bullet(b.id, b.from, b.x, b.y, b.angle);
     }
     for (let b in this.bullets) {
-      this.render_bullet(this.bullets[b]);
+      if (this.bullets[b].update()) {
+        // delete this.bullets[b];
+        pacage.REMOVE.push(b);
+      } else {
+        this.render_bullet(this.bullets[b]);
+      }
     }
 
     // obsticals
@@ -93,24 +98,24 @@ class Game {
     }
 
     this.player.updatePosition();
+    this.render_UI();
     pacage.PLAYER = this.player.getPackage();
     socket.emit("returnUpdate", [this.socket.id, pacage]);
   }
 
   render_bullet(data) {
-    console.log(consts.COLORS.bullet)
     fill(consts.COLORS.bullet);
-    circle(data.x, data.y, data.r)
+    circle(data.x + this.viewport_x, data.y + this.viewport_y, data.radius);
   }
 
   render_obstical(data) {
     fill(consts.COLORS.obstical);
-    circle(data.x, data.y, data.r)
+    circle(data.x, data.y, data.r);
   }
 
   render_food(data) {
     fill(consts.COLORS.food);
-    circle(data.x + this.viewport_x, data.y + this.viewport_y, consts.FOOD_RADIUS)
+    circle(data.x + this.viewport_x, data.y + this.viewport_y, consts.FOOD_RADIUS);
   }
 
   render_player(data) {
@@ -120,6 +125,13 @@ class Game {
     } else {
       fill(consts.COLORS.player_other);
     }
-    drawTriangle(data.x + this.viewport_x, data.y + this.viewport_y, data.size, data.angle)
+    drawTriangle(data.x + this.viewport_x, data.y + this.viewport_y, data.size, data.angle);
+  }
+
+  render_UI() {
+    ctx.font = "30px Calibri";
+    fill(0)
+    ctx.fillText("score: " + this.player.score, 10, 30);
+    hp_bar(this.player.HP)
   }
 }

@@ -22,10 +22,12 @@ class Game {
   // onely the first time send all the objects and the socket id to the client
   // for a proper init.
   initNewPlayer(socket) {
+    console.log("init player: ",
+      Object.keys(this.bullets).length)
     this.sockets.set(socket.id, socket);
     let pack = new Object();
     pack.ADD = {
-      BULLETS: Object.values(this.bullets),
+      BULLETS: [],
       FOODS: Object.values(this.foods),
       OBSTICALS: Object.values(this.obsticals)
     }
@@ -37,9 +39,6 @@ class Game {
   // a call back that is called 60 times a second,
   // it will send all the clients the data from all the other clients
   update() {
-    if (this.frameCount % 30 === 0) {
-      console.log(Object.keys(this.foods).length, " foods")
-    }
     this.frameCount++;
     if (Object.keys(this.foods).length > Consts.FOOD_RESPAN_RATE * this.players.size) {
       if (Math.random() < (Consts.FOOD_RESPAN_RATE * this.players.size) / (Object.keys(this.foods).length / 4)) {
@@ -73,7 +72,7 @@ class Game {
   onReturnUpdate(id, data) {
     let toRemove = data.REMOVE;
     if (toRemove.length > 0) {
-      console.log("removed object with id: ", toRemove[0])
+      // console.log("removed object with id: ", toRemove[0])
     }
     for (let id of toRemove) {
       this.pack.REMOVE.push(id);
@@ -84,7 +83,6 @@ class Game {
     this.players.set(id, data.PLAYER);
 
     if (data.BULLET != null || data.BULLET != undefined) {
-      console.log(this.bullets)
       this.bullets[data.BULLET.id] = data.BULLET;
       this.pack.ADD.BULLETS.push(data.BULLET);
     }

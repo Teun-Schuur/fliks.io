@@ -15,6 +15,9 @@ class Player {
     this.size = consts.PLAYER_SIZE;
     this.frame = 0;
     this.shoot = false;
+    this.score = 0;
+    this.points = 0;
+    this.HP = consts.PLAYER_HP - 50;
   }
 
   updatePosition() {
@@ -71,6 +74,18 @@ class Player {
       this.angle = this.xSpeed > 0 ? 0 : (Math.PI / 180) * 180;
     } else if (this.xSpeed === 0 && Math.abs(this.ySpeed) > 0.1) {
       this.angle = this.ySpeed > 0 ? (Math.PI / 180) * 90 : (Math.PI / 180) * 270;
+    }
+  }
+
+  setHP(val) {
+    if (val < 0) {
+      if (this.HP >= Math.abs(val)) {
+        this.HP += val;
+      }
+    } else {
+      if (this.HP <= val) {
+        this.HP += val;
+      }
     }
   }
 

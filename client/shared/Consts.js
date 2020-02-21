@@ -6,7 +6,7 @@ const consts = Object.freeze({
 
   FOOD_RADIUS: 10,
 
-
+  PLAYER_HP: 100,
   PLAYER_SIZE: 33,
   PLAYER_SHOOTING_SPEED: 0.1,
 
@@ -14,6 +14,8 @@ const consts = Object.freeze({
   FOOD_SCORE: 1,
   FOOD_RESPAN_RATE: 1,
   MAX_FOOD_SPAN: 1000,
+
+  BULLET_SPEED: 16,
 
 
 
