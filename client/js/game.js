@@ -18,13 +18,9 @@ class Game {
   }
 
   update(data) {
-    var toAdd = data.ADD; // .BULLET [], .OBSTICAL [], .FOOD []
+    var toAdd = data.ADD; // .BULLETS [], .OBSTICAL [], .FOOD []
     var toRemove = data.REMOVE; // [] of ID's
     var players = data.PLAYERS; // [] of players
-
-    if (toRemove.length > 0) {
-      console.log("removing: ", toRemove[0], this.bullets[toRemove[0]])
-    }
 
     clearScreen(consts.BACKGROUND);
     for (let id of toRemove) {
@@ -60,7 +56,7 @@ class Game {
         this.player.score++;
         this.player.points++;
         pacage.REMOVE.push(f_id);
-        this.player.setHP(10)
+        this.player.setHP(2)
       }
       this.render_food(f);
     }
@@ -77,9 +73,18 @@ class Game {
       pacage.BULLET = bul.getPackage();
     }
     for (let b of toAdd.BULLETS) {
-      this.bullets[b.id] = new Bullet(b.id, b.from, b.x, b.y, b.angle);
+      this.bullets[b.id] = new Bullet(b.id, b.from_id, b.x, b.y, b.angle);
     }
     for (let b in this.bullets) {
+      var bul = this.bullets[b];
+      if (bul.isFromId != this.player.id) {
+        if (rectPoint(this.player.x - this.player.size, this.player.y - this.player.size, this.player.size * 2, this.player.size * 2, bul.x, bul.y)) {
+          console.log("HP: ", this.player.HP);
+          this.player.setHP(-3);
+          pacage.REMOVE.push(b);
+          break;
+        }
+      }
       if (this.bullets[b].update()) {
         // delete this.bullets[b];
         pacage.REMOVE.push(b);

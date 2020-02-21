@@ -17,7 +17,7 @@ class Player {
     this.shoot = false;
     this.score = 0;
     this.points = 0;
-    this.HP = consts.PLAYER_HP - 50;
+    this.HP = consts.PLAYER_HP;
   }
 
   updatePosition() {
@@ -83,7 +83,7 @@ class Player {
         this.HP += val;
       }
     } else {
-      if (this.HP <= val) {
+      if (this.HP + val <= 100) {
         this.HP += val;
       }
     }
