@@ -30,6 +30,18 @@ class Player {
     }
     this.y += this.ySpeed;
     this.x += this.xSpeed;
+    if (this.x + this.size > consts.MAP_WIDTH) {
+      this.x = consts.MAP_WIDTH - this.size;
+    }
+    if (this.x - this.size < 0) {
+      this.x = this.size;
+    }
+    if (this.y + this.size > consts.MAP_HEIGHT) {
+      this.y = consts.MAP_HEIGHT - this.size;
+    }
+    if (this.y - this.size < 0) {
+      this.y = this.size;
+    }
     if (this.ySpeed !== 0 && this.xSpeed !== 0) {
       this.angle = Math.atan(this.ySpeed / this.xSpeed);
       if (this.xSpeed < 0) {

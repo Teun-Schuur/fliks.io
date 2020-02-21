@@ -1,15 +1,15 @@
 const Consts = require("../client/shared/Consts");
-const Food = require("./Food")
-const Obstical = require("./Obstical")
-const Bullet = require("./Bullet")
+// const Food = require("./Food")
+// const Obstical = require("./Obstical")
+// const Bullet = require("./Bullet")
 
 class Game {
   constructor() {
     this.sockets = new Map();
     this.players_pack = new Map();
-    this.bullets = {};
-    this.foods = {};
-    this.obsticals = {};
+    this.bullets = [];
+    this.foods = [];
+    this.obsticals = [];
   }
 
   initNewPlayer(socket) {
@@ -18,15 +18,17 @@ class Game {
   }
 
   update() {
-    if (Object.keys(this.foods).length < Consts.FOOD_RESPAN_RATE) {
-      if (Math.random() < Consts.FOOD_RESPAN_RATE / Object.keys(this.foods).length) {
-        let food = new Food(ID())
-        this.foods[food.id] = food;
-      }
-    } else {
-      for (let i = 0; i < Consts.FOOD_RESPAN_RATE; i++) {
-        let food = new Food(ID())
-        this.foods[food.id] = food;
+    if (Object.keys(this.foods).length < 1000) {
+      if (Object.keys(this.foods).length > Consts.FOOD_RESPAN_RATE * this.players_pack.size) {
+        if (Math.random() < (Consts.FOOD_RESPAN_RATE * this.players_pack.size) / Object.keys(this.foods).length) {
+          let food = new Food(ID())
+          this.foods[food.id] = food;
+        }
+      } else {
+        for (let i = 0; i < Consts.FOOD_RESPAN_RATE * this.players_pack.size; i++) {
+          let food = new Food(ID())
+          this.foods[food.id] = food;
+        }
       }
     }
 
@@ -43,7 +45,7 @@ class Game {
   }
 
   onRemove(object, id) {
-    console.log("remove " + object + " with id of: " + id)
+    console.log("remove a" + object + " with the id of: " + id)
     if (object == "FOOD") {
       delete this.foods[id];
     } else if (object == "BULLET") {
@@ -55,7 +57,6 @@ class Game {
 
   onReturnUpdate(id, data) {
     this.players_pack.set(id, data);
-    // console.log(data)
   }
 
   sendPackage() {

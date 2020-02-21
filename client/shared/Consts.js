@@ -9,7 +9,7 @@ const consts = Object.freeze({
   PLAYER_SIZE: 33,
   BEGIN_HP: 100,
   FOOD_SCORE: 1,
-  FOOD_RESPAN_RATE: 0.03,
+  FOOD_RESPAN_RATE: 0.9,
 
 
 

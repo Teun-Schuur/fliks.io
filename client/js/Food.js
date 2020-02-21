@@ -1,12 +1,8 @@
-const Consts = require("../client/shared/Consts");
-
-
-class Obstical {
-  constructor(id) {
+class Food {
+  constructor(id, x, y) {
     this.id = id;
     this.x = Math.random() * Consts.MAP_WIDTH;
     this.y = Math.random() * Consts.MAP_HEIGHT;
-    this.radius = Math.random() * 10 + 10;
   }
 
 
@@ -15,10 +11,9 @@ class Obstical {
       id: this.id,
       x: this.x,
       y: this.y,
-      r: this.radius
     }
   }
 }
 
 
-module.exports = Obstical;
+module.exports = Food;
