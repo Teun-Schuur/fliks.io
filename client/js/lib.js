@@ -11,8 +11,8 @@ function resizeCanvas() {
   HEIGHT = canvas.height;
 }
 
-function clearScreen() {
-  fill(180)
+function clearScreen(backround = 180) {
+  fill(backround)
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 }
 

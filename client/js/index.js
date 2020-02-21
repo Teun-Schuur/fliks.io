@@ -27,7 +27,6 @@ document.onkeydown = function(event) {
     game.player.pressingUp = true;
   else if (event.keyCode === 32) {
     game.player.pressingSpace = true;
-    game.player.frame = 0;
   }
 };
 
@@ -42,6 +41,5 @@ document.onkeyup = function(event) {
     game.player.pressingUp = false;
   else if (event.keyCode === 32) {
     game.player.pressingSpace = false;
-    game.player.frame = 0;
   }
 };

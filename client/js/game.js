@@ -22,7 +22,11 @@ class Game {
     var toRemove = data.REMOVE; // [] of ID's
     var players = data.PLAYERS; // [] of players
 
-    clearScreen();
+    if (toRemove.length > 0) {
+      console.log("removing: ", toRemove[0], this.foods[toRemove[0]])
+    }
+
+    clearScreen(consts.BACKGROUND);
     for (let id of toRemove) {
       delete this.foods[id];
       delete this.bullets[id];
@@ -60,7 +64,7 @@ class Game {
 
     // bullets
     if (this.player.shoot) {
-      pacage.BULLET = new Bullet(
+      let bul = new Bullet(
         ID(),
         this.player.id,
         this.player.x,
@@ -68,7 +72,9 @@ class Game {
         this.player.xSpeed,
         this.player.ySpeed
       );
-      this.bullets[pacage.BULLET.id] = pacage.BULLET;
+      pacage.BULLET = bul.getPackage();
+      this.bullets[bul.id] = bul;
+
     }
     for (let b of toAdd.BULLETS) {
       this.bullets[b.id] = new Bullet(b.id, b.from, b.x, b.y, b.xSpeed, b.ySpeed);
@@ -92,6 +98,7 @@ class Game {
   }
 
   render_bullet(data) {
+    console.log(consts.COLORS.bullet)
     fill(consts.COLORS.bullet);
     circle(data.x, data.y, data.r)
   }

@@ -15,7 +15,9 @@ class Bullet {
       from_id: this.isFromId,
       x: this.x,
       y: this.y,
-      r: this.radius
+      r: this.radius,
+      xSpeed: this.xSpeed,
+      ySpeed: this.ySpeed
     }
   }
 }

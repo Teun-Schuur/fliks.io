@@ -8,7 +8,7 @@ class Player {
     this.pressingUp = false;
     this.pressingDown = false;
     this.pressingSpace = false;
-    this.maxSpeed = 2;
+    this.maxSpeed = 1;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.angle = 0;
@@ -18,17 +18,30 @@ class Player {
   }
 
   updatePosition() {
-    if (this.pressingSpace && consts.PLAYER_SHOOTING_SPEED * 60 % this.frame === 0) {
+    if (this.pressingSpace && (this.frame % (consts.PLAYER_SHOOTING_SPEED * consts.FRAME_RATE) === 0)) {
       this.shoot = true;
-    } else this.shoot = false;
-    if (this.pressingRight) this.xSpeed += this.maxSpeed;
-    if (this.pressingLeft) this.xSpeed -= this.maxSpeed;
-    if (this.pressingUp) this.ySpeed -= this.maxSpeed;
-    if (this.pressingDown) this.ySpeed += this.maxSpeed;
+    } else {
+      this.shoot = false;
+    }
+    if (
+      (this.pressingRight && this.pressingUp) ||
+      (this.pressingLeft && this.pressingUp) ||
+      (this.pressingRight && this.pressingDown) ||
+      (this.pressingLeft && this.pressingDown)) {
+      if (this.pressingRight) this.xSpeed += this.maxSpeed * 0.7;
+      if (this.pressingLeft) this.xSpeed -= this.maxSpeed * 0.7;
+      if (this.pressingUp) this.ySpeed -= this.maxSpeed * 0.7;
+      if (this.pressingDown) this.ySpeed += this.maxSpeed * 0.7;
+    } else {
+      if (this.pressingRight) this.xSpeed += this.maxSpeed;
+      if (this.pressingLeft) this.xSpeed -= this.maxSpeed;
+      if (this.pressingUp) this.ySpeed -= this.maxSpeed;
+      if (this.pressingDown) this.ySpeed += this.maxSpeed;
+    }
     this.frame++;
 
-    this.ySpeed *= 0.9;
-    this.xSpeed *= 0.9;
+    this.ySpeed *= 0.92;
+    this.xSpeed *= 0.92;
     if (Math.abs(this.ySpeed) < 0.01) {
       this.ySpeed = 0;
     }
