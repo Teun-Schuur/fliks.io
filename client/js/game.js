@@ -144,7 +144,8 @@ class Game {
       fill(consts.COLORS.player_self);
       // drawTriangle(d, HEIGHT / 2, data.size, data.angle);
     } else {
-      fill(consts.COLORS.player_other);
+      fill(map(data.hp, 0, 100, 0, 255), 40, 255 - map(data.hp, 0, 100, 0, 255))
+      // fill(consts.COLORS.player_other);
     }
     drawTriangle(data.x + this.viewport_x, data.y + this.viewport_y, data.size, data.angle);
   }

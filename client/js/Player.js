@@ -99,7 +99,8 @@ class Player {
       x: this.x,
       y: this.y,
       angle: this.angle,
-      size: this.size
+      size: this.size,
+      hp: this.HP,
     }
   }
 }

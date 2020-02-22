@@ -22,8 +22,7 @@ const consts = Object.freeze({
   COLORS: {
     bullet: [200, 200, 255],
     obstical: [200, 0, 210],
-    player_self: [255, 0, 0],
-    player_other: [10, 50, 200],
+    player_self: [167, 229, 65],
     food: [255, 100, 0]
   },
 
