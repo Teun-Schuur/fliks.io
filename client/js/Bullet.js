@@ -7,7 +7,8 @@ class Bullet {
     this.angle = angle;
     this.xSpeed = consts.BULLET_SPEED * Math.cos(angle);
     this.ySpeed = consts.BULLET_SPEED * Math.sin(angle);
-    this.radius = 5;
+    this.radius = 8;
+    this.deadFrom = null;
   }
 
   update() {

@@ -20,7 +20,20 @@ class Player {
     this.HP = consts.PLAYER_HP;
   }
 
+  respan() {
+    this.x = consts.MAP_WIDTH / 2 + (Math.random() - 0.5) * 400;
+    this.y = consts.MAP_HEIGHT / 2 + (Math.random() - 0.5) * 400;
+    this.score = Math.round(this.score / 5);
+    this.points = Math.round(this.score / 5);
+    this.HP = consts.PLAYER_HP;
+    this.xSpeed = 0;
+    this.ySpeed = 0;
+  }
+
   updatePosition() {
+    if (this.HP <= 0) {
+      this.respan();
+    }
     if (this.pressingSpace && (this.frame % (consts.PLAYER_SHOOTING_SPEED * consts.FRAME_RATE) === 0)) {
       this.shoot = true;
     } else {
