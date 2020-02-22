@@ -1,9 +1,5 @@
 const canvas = document.getElementById("ctx");
 const ctx = canvas.getContext("2d");
-// const maskCanvas = document.getElementById('mask');
-// const maskCtx = maskCanvas.getContext('2d');
-// maskCanvas.width = canvas.width;
-// maskCanvas.height = canvas.height;
 
 let WIDTH = NaN;
 let HEIGHT = NaN;
@@ -35,9 +31,10 @@ document.onkeydown = function(event) {
     game.player.pressingLeft = true;
   else if (event.keyCode === 87)
     game.player.pressingUp = true;
-  else if (event.keyCode === 32) {
+  else if (event.keyCode === 32)
     game.player.pressingSpace = true;
-  }
+  else if (event.keyCode === 77)
+    game.night = !game.night;
 };
 
 document.onkeyup = function(event) {

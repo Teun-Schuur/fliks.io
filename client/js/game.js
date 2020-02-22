@@ -1,12 +1,12 @@
 class Game {
   constructor(socket) {
     this.socket = socket;
+    this.name = ID();
     this.player = new Player();
     this.foods = {};
     this.bullets = {};
     this.obsticals = {};
-
-
+    this.night = consts.NIGHT;
     this.viewport_x = clamp(-this.player.x + canvas.width / 2, canvas.width - consts.MAP_WIDTH, 0);
     this.viewport_y = clamp(-this.player.y + canvas.height / 2, canvas.height - consts.MAP_HEIGHT, 0);
   }
@@ -16,27 +16,38 @@ class Game {
     this.update(pack)
   }
 
+
   update(data) {
     var toAdd = data.ADD; // .BULLETS [], .OBSTICAL [], .FOOD []
     var toRemove = data.REMOVE; // [] of ID's
     var players = data.PLAYERS; // [] of players
 
-    clearScreen([27, 27, 27]);
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(
-      mouseX,
-      mouseY,
-      this.player.points + consts.VIEW_CIRCLE_MIN > consts.VIEW_CIRCLE_MAX ? 600 : this.player.points + consts.VIEW_CIRCLE_MIN,
-      0, 2 * Math.PI, false
-    );
-    ctx.clip()
+    if (this.night) {
+      clearScreen(27);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(
+        mouseX,
+        mouseY,
+        this.player.score + consts.VIEW_CIRCLE_MIN > consts.VIEW_CIRCLE_MAX ? consts.VIEW_CIRCLE_MAX : this.player.score + consts.VIEW_CIRCLE_MIN,
+        0, 2 * Math.PI, false
+      );
+      ctx.clip()
+    }
     clearScreen(consts.BACKGROUND);
 
     for (let id of toRemove) {
-      delete this.foods[id];
-      delete this.bullets[id];
-      delete this.obsticals[id];
+      if (!Array.isArray(id)) {
+        delete this.foods[id];
+        delete this.bullets[id];
+        delete this.obsticals[id];
+      } else {
+        console.log(id)
+        if (id[1] == this.player.id) {
+          this.player.score += id[2];
+        }
+        delete this.bullets[id[0]];
+      }
     }
 
     // create packge to send back
@@ -76,16 +87,17 @@ class Game {
     for (let f_id in this.foods) {
       let f = this.foods[f_id];
       if (rectPoint(this.player.x - this.player.size, this.player.y - this.player.size, this.player.size * 2, this.player.size * 2, f.x, f.y)) {
-        this.player.score++;
-        this.player.points++;
+        this.player.score += consts.FOOD_SCORE;
+        this.player.points += consts.FOOD_SCORE;
         pacage.REMOVE.push(f_id);
-        this.player.setHP(2)
+        this.player.setHP(1)
       }
       this.render_food(f);
     }
 
     // bullets
-    if (this.player.shoot) {
+    if (this.player.shoot && this.player.score >= consts.BULLET_COST) {
+      this.player.score -= consts.BULLET_COST;
       let bul = new Bullet(
         ID(),
         this.player.id,
@@ -103,8 +115,13 @@ class Game {
       if (bul.isFromId != this.player.id) {
         if (rectPoint(this.player.x - this.player.size, this.player.y - this.player.size, this.player.size * 2, this.player.size * 2, bul.x, bul.y)) {
           console.log("HP: ", this.player.HP);
-          this.player.setHP(-3);
-          pacage.REMOVE.push(b);
+          this.player.setHP(-8);
+          // bul.deadFrom = this.player.id;
+          if (this.player.HP <= 0) {
+            pacage.REMOVE.push([b, bul.isFromId, this.player.score]);
+          } else {
+            pacage.REMOVE.push(b);
+          }
           break;
         }
       }
@@ -127,17 +144,9 @@ class Game {
     for (let player of players) {
       this.render_player(player);
     }
-
-    // maskCtx.clearRect(0, 0, WIDTH, HEIGHT);
-    // maskCtx.fillStyle = "black";
-    // maskCtx.globalCompositeOperation = 'xor';
-    // maskCtx.fillRect(0, 0, WIDTH, HEIGHT);
-    // maskCtx.arc(mouseX, mouseY, 200, 0, 2 * Math.PI);
-    // maskCtx.fill();
-
-    // ctx.drawImage(maskCanvas, 0, 0);
-
-    ctx.restore()
+    if (this.night) {
+      ctx.restore()
+    }
     this.render_UI();
 
     this.player.updatePosition();
