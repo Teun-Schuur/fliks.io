@@ -7,6 +7,8 @@ function resizeCanvas() {
     window.innerHeight ||
     document.documentElement.clientHeight ||
     document.body.clientHeight;
+  maskCanvas.width = canvas.width;
+  maskCanvas.height = canvas.height;
   WIDTH = canvas.width;
   HEIGHT = canvas.height;
 }

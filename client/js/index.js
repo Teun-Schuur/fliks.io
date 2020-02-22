@@ -1,5 +1,11 @@
 const canvas = document.getElementById("ctx");
 const ctx = canvas.getContext("2d");
+const maskCanvas = document.getElementById('mask');
+const maskCtx = maskCanvas.getContext('2d');
+maskCanvas.width = canvas.width;
+maskCanvas.height = canvas.height;
+maskCtx.fillStyle = "black";
+maskCtx.globalCompositeOperation = 'xor';
 let WIDTH = NaN;
 let HEIGHT = NaN;
 resizeCanvas();

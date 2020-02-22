@@ -17,14 +17,20 @@ console.log("Server started.");
 
 io.on("connection", function(socket) {
   console.log("New connection: ", socket.id)
-  addNewUser(socket);
+  addNewUser(socket)
   socket.on('disconnect', function() {
     console.log(socket.id + ' has disconnected from the chat.');
     onDisconnect(socket)
   });
   socket.on("returnUpdate", (data) => {
     returnUpdate(data);
-  })
+  });
+  socket.on("inGame", (socket) => {
+    addNewUser(socket);
+  });
+  socket.on("outGame", (id) => {
+    playerOutGame(id);
+  });
 });
 
 
@@ -32,6 +38,10 @@ const game = new Game();
 
 function addNewUser(socket) {
   game.initNewPlayer(socket)
+}
+
+function playerOutGame(id) {
+  // TODO
 }
 
 function returnUpdate(data) {

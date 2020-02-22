@@ -118,8 +118,18 @@ class Game {
       this.render_player(player);
     }
 
+    // maskCtx.fillStyle = "black";
+    // maskCtx.globalCompositeOperation = 'xor';
+    // maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+    // maskCtx.arc(300, 300, 200, 0, 2 * Math.PI);
+    // maskCtx.fill();
+    //
+    // ctx.drawImage(maskCanvas, 0, 0);
+
     this.player.updatePosition();
     this.render_UI();
+
+
     pacage.PLAYER = this.player.getPackage();
     socket.emit("returnUpdate", [this.socket.id, pacage]);
   }
