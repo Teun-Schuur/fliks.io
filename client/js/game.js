@@ -12,7 +12,6 @@ class Game {
   }
 
   init(id, pack) {
-    console.log(id, pack)
     this.player.id = id;
     this.update(pack)
   }

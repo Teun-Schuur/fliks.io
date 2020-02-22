@@ -12,7 +12,11 @@ app.get("/", function(req, res) {
 app.use("/client", express.static(__dirname + "/client"));
 
 serv.listen(2000);
-console.log("Server started.");
+
+require('dns').lookup(require('os').hostname(), function(err, add, fam) {
+  console.log(err, add, fam)
+  console.log("Server started at:\t" + add + ":2000/client\n\t\t\tlocalhost:2000");
+})
 
 
 io.on("connection", function(socket) {
