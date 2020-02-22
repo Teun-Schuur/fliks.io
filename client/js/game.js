@@ -22,7 +22,18 @@ class Game {
     var toRemove = data.REMOVE; // [] of ID's
     var players = data.PLAYERS; // [] of players
 
+    clearScreen([27, 27, 27]);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(
+      mouseX,
+      mouseY,
+      this.player.points + consts.VIEW_CIRCLE_MIN > consts.VIEW_CIRCLE_MAX ? 600 : this.player.points + consts.VIEW_CIRCLE_MIN,
+      0, 2 * Math.PI, false
+    );
+    ctx.clip()
     clearScreen(consts.BACKGROUND);
+
     for (let id of toRemove) {
       delete this.foods[id];
       delete this.bullets[id];
@@ -118,17 +129,19 @@ class Game {
       this.render_player(player);
     }
 
+    // maskCtx.clearRect(0, 0, WIDTH, HEIGHT);
     // maskCtx.fillStyle = "black";
     // maskCtx.globalCompositeOperation = 'xor';
-    // maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-    // maskCtx.arc(300, 300, 200, 0, 2 * Math.PI);
+    // maskCtx.fillRect(0, 0, WIDTH, HEIGHT);
+    // maskCtx.arc(mouseX, mouseY, 200, 0, 2 * Math.PI);
     // maskCtx.fill();
-    //
+
     // ctx.drawImage(maskCanvas, 0, 0);
 
-    this.player.updatePosition();
+    ctx.restore()
     this.render_UI();
 
+    this.player.updatePosition();
 
     pacage.PLAYER = this.player.getPackage();
     socket.emit("returnUpdate", [this.socket.id, pacage]);

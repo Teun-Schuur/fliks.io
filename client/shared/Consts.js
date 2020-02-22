@@ -17,7 +17,8 @@ const consts = Object.freeze({
 
   BULLET_SPEED: 16,
 
-
+  VIEW_CIRCLE_MIN: 200,
+  VIEW_CIRCLE_MAX: 450,
 
   COLORS: {
     bullet: [200, 200, 255],

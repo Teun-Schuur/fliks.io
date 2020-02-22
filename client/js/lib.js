@@ -7,13 +7,13 @@ function resizeCanvas() {
     window.innerHeight ||
     document.documentElement.clientHeight ||
     document.body.clientHeight;
-  maskCanvas.width = canvas.width;
-  maskCanvas.height = canvas.height;
+
   WIDTH = canvas.width;
   HEIGHT = canvas.height;
 }
 
 function clearScreen(backround = 180) {
+  // ctx.clearRect(0, 0, WIDTH, HEIGHT);
   fill(backround)
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 }
