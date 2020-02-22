@@ -39,10 +39,23 @@ class Game {
         this.viewport_y = -this.player.y + canvas.height / 2;
         this.viewport_x = clamp(this.viewport_x, canvas.width - consts.MAP_WIDTH, 0);
         this.viewport_y = clamp(this.viewport_y, canvas.height - consts.MAP_HEIGHT, 0);
+      } else {
+        if (rectCol(
+            this.player.x,
+            this.player.y,
+            this.player.size,
+            this.player.size,
+            player.x,
+            player.y,
+            player.size,
+            player.size)) {
+          this.player.setHP(-3);
+          this.player.xSpeed *= 2;
+          this.player.ySpeed *= 2;
+          this.player.xSpeed *= -1;
+          this.player.ySpeed *= -1;
+        }
       }
-    }
-    for (let player of players) {
-      this.render_player(player);
     }
 
     // food
@@ -99,7 +112,11 @@ class Game {
 
     }
     for (let o in this.obsticals) {
-      this.render_obstical(obs[o])
+      this.render_obstical(obs[o]);
+    }
+
+    for (let player of players) {
+      this.render_player(player);
     }
 
     this.player.updatePosition();
@@ -119,7 +136,7 @@ class Game {
   }
 
   render_food(data) {
-    fill(consts.COLORS.food);
+    fill(data.col);
     circle(data.x + this.viewport_x, data.y + this.viewport_y, consts.FOOD_RADIUS);
   }
 
@@ -135,7 +152,7 @@ class Game {
 
   render_UI() {
     ctx.font = "30px Calibri";
-    fill(0)
+    fill(200)
     ctx.fillText("score: " + this.player.score, 10, 30);
     hp_bar(this.player.HP)
   }

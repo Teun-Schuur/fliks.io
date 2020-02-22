@@ -1,8 +1,8 @@
 class Player {
   constructor() {
     this.id = null;
-    this.x = consts.MAP_WIDTH / 2;
-    this.y = consts.MAP_HEIGHT / 2;
+    this.x = consts.MAP_WIDTH / 2 + (Math.random() - 0.5) * 400;
+    this.y = consts.MAP_HEIGHT / 2 + (Math.random() - 0.5) * 400;
     this.pressingRight = false;
     this.pressingLeft = false;
     this.pressingUp = false;
@@ -81,10 +81,14 @@ class Player {
     if (val < 0) {
       if (this.HP >= Math.abs(val)) {
         this.HP += val;
+      } else {
+        this.HP = 0;
       }
     } else {
       if (this.HP + val <= 100) {
         this.HP += val;
+      } else {
+        this.HP = 100;
       }
     }
   }

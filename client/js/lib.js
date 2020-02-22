@@ -64,6 +64,7 @@ function clamp(value, min, max) {
 function circle(x, y, r) {
   ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+  ctx.closePath();
   ctx.fill();
 }
 
@@ -95,4 +96,15 @@ function hp_bar(hp) {
   rect(x, y, w, h);
   fill(255, 0, 0)
   rect(x + 10, y + 10, length, h - 20);
+}
+
+function rectCol(x1, y1, w1, h1, x2, y2, w2, h2) {
+  if (x1 + w1 >= x2 &&
+    x1 <= x2 + w2 &&
+    y1 + h1 >= y2 &&
+    y1 <= y2 + h2) {
+    return true;
+  } else {
+    return false;
+  }
 }

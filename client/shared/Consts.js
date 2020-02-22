@@ -1,7 +1,7 @@
 const consts = Object.freeze({
-  MAP_WIDTH: 4200,
-  MAP_HEIGHT: 4200,
-  BACKGROUND: [200, 0, 200],
+  MAP_WIDTH: 2400,
+  MAP_HEIGHT: 2400,
+  BACKGROUND: [35, 43, 43],
   FRAME_RATE: 60,
 
   FOOD_RADIUS: 10,
