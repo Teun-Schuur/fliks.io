@@ -99,7 +99,6 @@ class Game {
         }
       }
       if (this.bullets[b].update()) {
-        // delete this.bullets[b];
         pacage.REMOVE.push(b);
       } else {
         this.render_bullet(this.bullets[b]);
@@ -109,12 +108,12 @@ class Game {
     // obsticals
     for (let o of toAdd.OBSTICALS) {
       this.obsticals[o.id] = new Bullet(o.id, o.from, o.x, o.y, o.r);
-
     }
     for (let o in this.obsticals) {
       this.render_obstical(obs[o]);
     }
 
+    // render player
     for (let player of players) {
       this.render_player(player);
     }
