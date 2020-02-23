@@ -8,7 +8,6 @@ class Player {
     this.pressingUp = false;
     this.pressingDown = false;
     this.pressingSpace = false;
-    this.maxSpeed = 1;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.angle = 0;
@@ -21,10 +20,10 @@ class Player {
   }
 
   respan() {
-    this.x = consts.MAP_WIDTH / 2 + (Math.random() - 0.5) * 400;
-    this.y = consts.MAP_HEIGHT / 2 + (Math.random() - 0.5) * 400;
-    this.score = Math.round(this.score / 5);
-    this.points = Math.round(this.score / 5);
+    this.x = Math.random() * consts.MAP_WIDTH;
+    this.y = consts.MAP_HEIGHT * Math.random();
+    this.score = this.score * ((100 - consts.FOOD_LOSES_IF_DIE) / 100);
+    this.points = this.points * ((100 - consts.FOOD_LOSES_IF_DIE) / 100);
     this.HP = consts.PLAYER_HP;
     this.xSpeed = 0;
     this.ySpeed = 0;
@@ -44,20 +43,20 @@ class Player {
       (this.pressingLeft && this.pressingUp) ||
       (this.pressingRight && this.pressingDown) ||
       (this.pressingLeft && this.pressingDown)) {
-      if (this.pressingRight) this.xSpeed += this.maxSpeed * 0.7;
-      if (this.pressingLeft) this.xSpeed -= this.maxSpeed * 0.7;
-      if (this.pressingUp) this.ySpeed -= this.maxSpeed * 0.7;
-      if (this.pressingDown) this.ySpeed += this.maxSpeed * 0.7;
+      if (this.pressingRight) this.xSpeed += consts.SPEED * 0.75;
+      if (this.pressingLeft) this.xSpeed -= consts.SPEED * 0.75;
+      if (this.pressingUp) this.ySpeed -= consts.SPEED * 0.75;
+      if (this.pressingDown) this.ySpeed += consts.SPEED * 0.75;
     } else {
-      if (this.pressingRight) this.xSpeed += this.maxSpeed;
-      if (this.pressingLeft) this.xSpeed -= this.maxSpeed;
-      if (this.pressingUp) this.ySpeed -= this.maxSpeed;
-      if (this.pressingDown) this.ySpeed += this.maxSpeed;
+      if (this.pressingRight) this.xSpeed += consts.SPEED;
+      if (this.pressingLeft) this.xSpeed -= consts.SPEED;
+      if (this.pressingUp) this.ySpeed -= consts.SPEED;
+      if (this.pressingDown) this.ySpeed += consts.SPEED;
     }
     this.frame++;
 
-    this.ySpeed *= 0.92;
-    this.xSpeed *= 0.92;
+    this.ySpeed *= consts.RESISTENCE;
+    this.xSpeed *= consts.RESISTENCE;
     if (Math.abs(this.ySpeed) < 0.01) {
       this.ySpeed = 0;
     }
@@ -114,6 +113,7 @@ class Player {
       angle: this.angle,
       size: this.size,
       hp: this.HP,
+      score: this.score,
     }
   }
 }

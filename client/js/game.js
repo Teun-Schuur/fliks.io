@@ -37,17 +37,9 @@ class Game {
     clearScreen(consts.BACKGROUND);
 
     for (let id of toRemove) {
-      if (!Array.isArray(id)) {
-        delete this.foods[id];
-        delete this.bullets[id];
-        delete this.obsticals[id];
-      } else {
-        console.log(id)
-        if (id[1] == this.player.id) {
-          this.player.score += id[2];
-        }
-        delete this.bullets[id[0]];
-      }
+      delete this.foods[id];
+      delete this.bullets[id];
+      delete this.obsticals[id];
     }
 
     // create packge to send back
@@ -70,7 +62,7 @@ class Game {
             player.y,
             player.size,
             player.size)) {
-          this.player.setHP(-3);
+          this.player.setHP(-consts.PLAYER_COLLITION_HP_LOSS);
           this.player.xSpeed *= 2;
           this.player.ySpeed *= 2;
           this.player.xSpeed *= -1;
@@ -118,10 +110,13 @@ class Game {
           this.player.setHP(-8);
           // bul.deadFrom = this.player.id;
           if (this.player.HP <= 0) {
-            pacage.REMOVE.push([b, bul.isFromId, this.player.score]);
-          } else {
-            pacage.REMOVE.push(b);
+            socket.emit("ImDead", {
+              // name: this.name,
+              score: this.player.score,
+              to: bul.isFromId
+            })
           }
+          pacage.REMOVE.push(b);
           break;
         }
       }
@@ -186,5 +181,9 @@ class Game {
     fill(200)
     ctx.fillText("score: " + this.player.score, 10, 30);
     hp_bar(this.player.HP)
+  }
+
+  addScore(score) {
+    this.player.score += Math.ceil(score * consts.POINTS_GET_IF_KILED);
   }
 }

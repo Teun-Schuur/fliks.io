@@ -40,40 +40,47 @@ class Game {
   // it will send all the clients the data from all the other clients
   update() {
     this.frameCount++;
-    if (Object.keys(this.foods).length > Consts.FOOD_RESPAN_RATE * this.players.size) {
-      if (Math.random() < (Consts.FOOD_RESPAN_RATE * this.players.size) / (Object.keys(this.foods).length / 4)) {
-        let food = {
-          id: ID(),
-          x: Math.random() * Consts.MAP_WIDTH,
-          y: Math.random() * Consts.MAP_HEIGHT
+
+    // food
+    if (Object.keys(this.foods).length < Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size) {
+      if (Object.keys(this.foods).length > Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size) {
+        if (Math.random() < (Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size) / (Object.keys(this.foods).length / 4)) {
+          let food = {
+            id: ID(),
+            x: Math.random() * Consts.MAP_WIDTH,
+            y: Math.random() * Consts.MAP_HEIGHT
+          }
+          this.pack.ADD.FOODS.push(food);
+          this.foods[food.id] = food;
         }
-        this.pack.ADD.FOODS.push(food);
-        this.foods[food.id] = food;
-      }
-    } else {
-      for (let i = 0; i < Math.round(Consts.FOOD_RESPAN_RATE * this.players.size); i++) {
-        let food = {
-          id: ID(),
-          x: Math.random() * Consts.MAP_WIDTH,
-          y: Math.random() * Consts.MAP_HEIGHT
+      } else {
+        for (let i = 0; i < Math.round(Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size); i++) {
+          let food = {
+            id: ID(),
+            x: Math.random() * Consts.MAP_WIDTH,
+            y: Math.random() * Consts.MAP_HEIGHT
+          }
+          this.pack.ADD.FOODS.push(food);
+          this.foods[food.id] = food;
         }
-        this.pack.ADD.FOODS.push(food);
-        this.foods[food.id] = food;
       }
     }
     this.sendPackage();
   }
 
+  // will be caled if a client disconnect
   onDisconnect(id) {
     this.sockets.delete(id);
     this.players.delete(id);
   }
 
+  giveScore(data) {
+    this.sockets.get(data.to).emit("ImDead", data.score)
+  }
+
+  // client will send a mesage back with the objects that need to be added or removed.
   onReturnUpdate(id, data) {
     let toRemove = data.REMOVE;
-    if (toRemove.length > 0) {
-      // console.log("removed object with id: ", toRemove[0])
-    }
     for (let id of toRemove) {
       this.pack.REMOVE.push(id);
       delete this.foods[id];
@@ -104,7 +111,7 @@ class Game {
   }
 }
 
-
+// genarates a random id
 function ID() {
   return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
 }

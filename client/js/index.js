@@ -10,12 +10,24 @@ resizeCanvas();
 const socket = io();
 const game = new Game(socket);
 
+// const playMenu = document.getElementById('play-menu');
+// const playButton = document.getElementById('play-button');
+// const usernameInput = document.getElementById('username-input');
+
+// console.log(playMenu)
+// playMenu.classList.remove('hidden');
+
+
 socket.on("init", (data) => {
   game.init(data[0], data[1]);
 });
 
 socket.on("update", function(data) {
   game.update(data);
+});
+
+socket.on("ImDead", (score) => {
+  game.addScore(score)
 });
 
 window.addEventListener('resize', resizeCanvas, false);

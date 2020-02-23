@@ -34,6 +34,9 @@ io.on("connection", function(socket) {
   socket.on("outGame", (id) => {
     playerOutGame(id);
   });
+  socket.on("ImDead", (data) => {
+    game.giveScore(data);
+  });
 });
 
 
