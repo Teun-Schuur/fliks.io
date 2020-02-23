@@ -16,7 +16,8 @@ const game = new Game(socket);
 
 // console.log(playMenu)
 // playMenu.classList.remove('hidden');
-
+startEventListeners()
+// stopEventListeners()
 
 socket.on("init", (data) => {
   game.init(data[0], data[1]);
@@ -30,41 +31,50 @@ socket.on("ImDead", (score) => {
   game.addScore(score)
 });
 
-window.addEventListener('resize', resizeCanvas, false);
 
+function startEventListeners() {
+  window.addEventListener('resize', resizeCanvas, false);
 
+  document.onkeydown = function(event) {
+    if (event.keyCode === 68)
+      game.player.pressingRight = true;
+    else if (event.keyCode === 83)
+      game.player.pressingDown = true;
+    else if (event.keyCode === 65)
+      game.player.pressingLeft = true;
+    else if (event.keyCode === 87)
+      game.player.pressingUp = true;
+    else if (event.keyCode === 32)
+      game.player.pressingSpace = true;
+    else if (event.keyCode === 77)
+      game.night = !game.night;
+  };
 
-document.onkeydown = function(event) {
-  if (event.keyCode === 68)
-    game.player.pressingRight = true;
-  else if (event.keyCode === 83)
-    game.player.pressingDown = true;
-  else if (event.keyCode === 65)
-    game.player.pressingLeft = true;
-  else if (event.keyCode === 87)
-    game.player.pressingUp = true;
-  else if (event.keyCode === 32)
-    game.player.pressingSpace = true;
-  else if (event.keyCode === 77)
-    game.night = !game.night;
-};
+  document.onkeyup = function(event) {
+    if (event.keyCode === 68)
+      game.player.pressingRight = false;
+    else if (event.keyCode === 83)
+      game.player.pressingDown = false;
+    else if (event.keyCode === 65)
+      game.player.pressingLeft = false;
+    else if (event.keyCode === 87)
+      game.player.pressingUp = false;
+    else if (event.keyCode === 32) {
+      game.player.pressingSpace = false;
+    }
+  };
 
-document.onkeyup = function(event) {
-  if (event.keyCode === 68)
-    game.player.pressingRight = false;
-  else if (event.keyCode === 83)
-    game.player.pressingDown = false;
-  else if (event.keyCode === 65)
-    game.player.pressingLeft = false;
-  else if (event.keyCode === 87)
-    game.player.pressingUp = false;
-  else if (event.keyCode === 32) {
-    game.player.pressingSpace = false;
+  canvas.onmousemove = (mouseEvent) => {
+    mouseX = mouseEvent.pageX;
+    mouseY = mouseEvent.pageY;
   }
-};
+}
 
+function stopEventListeners() {
+  document.onkeydown = null;
 
-canvas.onmousemove = (mouseEvent) => {
-  mouseX = mouseEvent.pageX;
-  mouseY = mouseEvent.pageY;
+  document.onkeydown = null;
+  document.onkeyup = null;
+  canvas.onmousemove = null;
+  window.removeEventListener('resize', resizeCanvas, false);
 }
