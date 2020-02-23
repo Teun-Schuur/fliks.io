@@ -1,12 +1,12 @@
 class Game {
   constructor(socket) {
     this.socket = socket;
-    this.name = ID();
     this.player = new Player();
     this.foods = {};
     this.bullets = {};
     this.obsticals = {};
     this.night = consts.NIGHT;
+    this.messager = new Message();
     this.viewport_x = clamp(-this.player.x + canvas.width / 2, canvas.width - consts.MAP_WIDTH, 0);
     this.viewport_y = clamp(-this.player.y + canvas.height / 2, canvas.height - consts.MAP_HEIGHT, 0);
   }
@@ -34,7 +34,7 @@ class Game {
       );
       ctx.clip()
     }
-    clearScreen(consts.BACKGROUND);
+    clearScreen(consts.COLORS.background);
 
     for (let id of toRemove) {
       delete this.foods[id];
@@ -63,6 +63,14 @@ class Game {
             player.size,
             player.size)) {
           this.player.setHP(-consts.PLAYER_COLLITION_HP_LOSS);
+          if (this.player.HP <= 0) {
+            this.messager.addMessage("You have been killed by " + player.name + "!");
+            socket.emit("ImDead", {
+              name: this.player.name,
+              score: this.player.score,
+              to: player.id
+            })
+          }
           this.player.xSpeed *= 2;
           this.player.ySpeed *= 2;
           this.player.xSpeed *= -1;
@@ -110,8 +118,9 @@ class Game {
           this.player.setHP(-8);
           // bul.deadFrom = this.player.id;
           if (this.player.HP <= 0) {
+            this.messager.addMessage("You have been killed by " + bul.from_id + "!");
             socket.emit("ImDead", {
-              // name: this.name,
+              name: this.player.name,
               score: this.player.score,
               to: bul.isFromId
             })
@@ -181,9 +190,10 @@ class Game {
     fill(200)
     ctx.fillText("score: " + this.player.score, 10, 30);
     hp_bar(this.player.HP)
+    this.messager.render();
   }
 
   addScore(score) {
-    this.player.score += Math.ceil(score * consts.POINTS_GET_IF_KILED);
+    this.player.score += Math.round(score * consts.POINTS_GET_IF_KILED);
   }
 }

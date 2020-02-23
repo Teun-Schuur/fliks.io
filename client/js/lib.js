@@ -82,8 +82,8 @@ function rectPoint(x, y, w, h, px, py) {
   return (px > x && px < x + w && py > y && py < y + h)
 }
 
-function ID() {
-  return Math.random().toString(36).substr(2, 10) + Math.random().toString(36).substr(2, 5);
+function ID(length = 10) {
+  return Math.random().toString(36).substr(2, length)
 }
 
 const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;

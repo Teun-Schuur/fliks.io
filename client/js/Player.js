@@ -17,6 +17,7 @@ class Player {
     this.score = 0;
     this.points = 0;
     this.HP = consts.PLAYER_HP;
+    this.name = ID(4);
   }
 
   respan() {
@@ -114,6 +115,7 @@ class Player {
       size: this.size,
       hp: this.HP,
       score: this.score,
+      name: this.name,
     }
   }
 }
