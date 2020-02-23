@@ -17,6 +17,7 @@ class Game {
     this.pack.PLAYERS = []; // all the players info
 
     this.frameCount = 0;
+    this.night = Consts.NIGHT;
   }
 
   // onely the first time send all the objects and the socket id to the client
@@ -34,13 +35,19 @@ class Game {
     pack.PLAYERS = Object.values(this.players);
     pack.REMOVE = [];
     socket.emit("init", [socket.id, pack])
+    socket.emit("night", this.night);
   }
 
   // a call back that is called 60 times a second,
   // it will send all the clients the data from all the other clients
   update() {
     this.frameCount++;
-
+    if (this.frameCount % (60 * Consts.DAY_NIGHT_TIME) === 0) {
+      this.night = !this.night;
+      for (let [id, socket] of this.sockets) {
+        socket.emit("night", this.night);
+      }
+    }
     // food
     if (Object.keys(this.foods).length < Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size) {
       if (Object.keys(this.foods).length > Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size) {
@@ -75,7 +82,7 @@ class Game {
   }
 
   giveScore(data) {
-    this.sockets.get(data.to).emit("ImDead", data.score)
+    this.sockets.get(data.to).emit("ImDead", [data.score, data.name])
   }
 
   // client will send a mesage back with the objects that need to be added or removed.
