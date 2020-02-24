@@ -1,7 +1,8 @@
 class Game {
-  constructor(socket) {
+  constructor(socket, name) {
     this.socket = socket;
-    this.player = new Player();
+    this.player = new Player(name);
+    this.player.id = socket.id;
     this.foods = {};
     this.bullets = {};
     this.obsticals = {};
@@ -11,8 +12,7 @@ class Game {
     this.viewport_y = clamp(-this.player.y + canvas.height / 2, canvas.height - consts.MAP_HEIGHT, 0);
   }
 
-  init(id, pack) {
-    this.player.id = id;
+  init(pack) {
     this.update(pack)
   }
 
@@ -21,6 +21,7 @@ class Game {
     var toAdd = data.ADD; // .BULLETS [], .OBSTICAL [], .FOOD []
     var toRemove = data.REMOVE; // [] of ID's
     var players = data.PLAYERS; // [] of players
+    // console.log(toAdd, toRemove, players)
 
     if (this.night) {
       clearScreen(27);
@@ -156,7 +157,8 @@ class Game {
     this.player.updatePosition();
 
     pacage.PLAYER = this.player.getPackage();
-    socket.emit("returnUpdate", [this.socket.id, pacage]);
+    // console.log(pacage)
+    socket.emit("returnUpdate", [this.player.id, pacage]);
   }
 
   render_bullet(data) {

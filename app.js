@@ -28,11 +28,12 @@ io.on("connection", function(socket) {
   socket.on("returnUpdate", (data) => {
     returnUpdate(data);
   });
-  socket.on("inGame", (socket) => {
-    addNewUser(socket);
+  socket.on("inGame", (data) => {
+    game.playerInGame(data[0], data[1]);
   });
-  socket.on("outGame", (id) => {
-    playerOutGame(id);
+  socket.on("outGame", (data) => {
+    console.log(socket.id + ' is out of the game.');
+    game.playerOutGame(data);
   });
   socket.on("ImDead", (data) => {
     game.giveScore(data);

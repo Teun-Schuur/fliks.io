@@ -1,5 +1,5 @@
 class Player {
-  constructor() {
+  constructor(name) {
     this.id = null;
     this.x = consts.MAP_WIDTH / 2 + (Math.random() - 0.5) * 400;
     this.y = consts.MAP_HEIGHT / 2 + (Math.random() - 0.5) * 400;
@@ -17,7 +17,7 @@ class Player {
     this.score = 0;
     this.points = 0;
     this.HP = consts.PLAYER_HP;
-    this.name = ID(4);
+    this.name = name;
   }
 
   respan() {
@@ -31,6 +31,7 @@ class Player {
   }
 
   updatePosition() {
+
     if (this.HP <= 0) {
       this.respan();
     }
@@ -55,7 +56,9 @@ class Player {
       if (this.pressingDown) this.ySpeed += consts.SPEED;
     }
     this.frame++;
-
+    if (this.score > 50) {
+      stopGame()
+    }
     this.ySpeed *= consts.RESISTENCE;
     this.xSpeed *= consts.RESISTENCE;
     if (Math.abs(this.ySpeed) < 0.01) {

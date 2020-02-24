@@ -17,35 +17,28 @@ class Game {
     this.pack.PLAYERS = []; // all the players info
 
     this.frameCount = 0;
+    this.litleCounter = 0;
     this.night = Consts.NIGHT;
   }
 
   // onely the first time send all the objects and the socket id to the client
   // for a proper init.
   initNewPlayer(socket) {
-    console.log("init player: ",
-      Object.keys(this.bullets).length)
     this.sockets.set(socket.id, socket);
-    let pack = new Object();
-    pack.ADD = {
-      BULLETS: [],
-      FOODS: Object.values(this.foods),
-      OBSTICALS: Object.values(this.obsticals)
-    }
-    pack.PLAYERS = Object.values(this.players);
-    pack.REMOVE = [];
-    socket.emit("init", [socket.id, pack])
-    socket.emit("night", this.night);
+    socket.emit("init")
   }
 
   // a call back that is called 60 times a second,
   // it will send all the clients the data from all the other clients
   update() {
     this.frameCount++;
+    if (this.frameCount % 500 === 0) {
+      console.log(this.sockets, this.players)
+    }
     if (this.frameCount % (60 * Consts.DAY_NIGHT_TIME) === 0) {
       this.night = !this.night;
-      for (let [id, socket] of this.sockets) {
-        socket.emit("night", this.night);
+      for (let [id, player] of this.players) {
+        this.sockets.get(id).emit("night", this.night);
       }
     }
     // food
@@ -75,6 +68,27 @@ class Game {
     this.sendPackage();
   }
 
+  playerOutGame(id) {
+    this.players.delete(id);
+    this.litleCounter = 0;
+    console.log("player is out!, " + id, this.players);
+  }
+
+  playerInGame(id, data) {
+    let pack = new Object();
+    pack.ADD = {
+      BULLETS: [],
+      FOODS: Object.values(this.foods),
+      OBSTICALS: Object.values(this.obsticals)
+    }
+    pack.PLAYERS = Object.values(this.players);
+    pack.REMOVE = [];
+    this.sockets.get(id).emit("initPlayer", pack)
+    this.sockets.get(id).emit("night", this.night);
+    this.players.set(id, data);
+    console.log("player is in!, " + id, this.players)
+  }
+
   // will be caled if a client disconnect
   onDisconnect(id) {
     this.sockets.delete(id);
@@ -82,11 +96,16 @@ class Game {
   }
 
   giveScore(data) {
-    this.sockets.get(data.to).emit("ImDead", [data.score, data.name])
+    try {
+      this.sockets.get(data.to).emit("ImDead", [data.score, data.name])
+    } catch (e) {
+      console.log(e + " ... " + data)
+    }
   }
 
   // client will send a mesage back with the objects that need to be added or removed.
   onReturnUpdate(id, data) {
+    // console.log(data)
     let toRemove = data.REMOVE;
     for (let id of toRemove) {
       this.pack.REMOVE.push(id);
@@ -94,7 +113,9 @@ class Game {
       delete this.bullets[id];
       delete this.obsticals[id];
     }
-    this.players.set(id, data.PLAYER);
+    if (this.players.has(id)) {
+      this.players.set(id, data.PLAYER);
+    }
 
     if (data.BULLET != null || data.BULLET != undefined) {
       this.bullets[data.BULLET.id] = data.BULLET;
@@ -104,8 +125,12 @@ class Game {
 
   sendPackage() {
     this.pack.PLAYERS = Array.from(this.players.values());
-    for (let [id, socket] of this.sockets) {
-      socket.emit("update", this.pack);
+    if (this.pack.PLAYERS.length > 1) {}
+    for (let [id, socket] of this.players) {
+      // console.log(id, Array.from(this.players.keys()))
+      console.log("its true!" + this.litleCounter)
+      this.litleCounter++;
+      this.sockets.get(id).emit("update", this.pack);
     }
 
     // reset the package
