@@ -4,20 +4,50 @@ socket = io();
 socket.on("init", () => {
   console.log("connection made!")
 });
+socket.prefScore = 0;
 
 let WIDTH = NaN;
 let HEIGHT = NaN;
 var mouseX = 0;
 var mouseY = 0;
 var play = false; // working on TODO::::
-
 resizeCanvas();
+
 var socket;
-var game;
+var game = null;
 
 var playMenu;
 var playButton;
 var usernameInput;
+
+window.addEventListener('resize', resizeCanvas);
+
+socket.on("initPlayer", (data) => {
+  // console.log(data)
+  if (game != null) {
+    game.init(data);
+  }
+});
+
+socket.on("update", function(data) {
+  if (game != null) {
+    game.update(data);
+  }
+});
+
+socket.on("ImDead", (score) => {
+  if (game != null) {
+    game.addScore(Math.max(Math.round(score[0]), 30))
+    game.messager.addMessage("You killed " + score[1] + "!\n" + Math.round(score[0]) + " added to your score!");
+  }
+});
+
+socket.on("night", (night) => {
+  if (game != null) {
+    game.night = night;
+    game.messager.addMessage(night ? "it's night!" : "it's day!");
+  }
+});
 
 document.addEventListener("DOMContentLoaded", function(event) {
   playMenu = document.getElementById('play-menu');
@@ -30,17 +60,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
   playButton.addEventListener("click", function() {
     startGame();
   });
+  document.onkeydown = event => {
+    if (event.keyCode === 13)
+      startGame();
+  };
 });
 
 
 function startGame() {
   playMenu.classList.add('hidden');
   canvas.classList.remove("hidden")
-  game = new Game(socket, usernameInput.value);
+  game = new Game(socket, usernameInput.value, socket.prefScore);
   play = true;
   socket.emit("inGame", [socket.id, game.player.getPackage()]);
 
-  window.addEventListener('resize', resizeCanvas);
 
   document.onkeydown = function(event) {
     if (event.keyCode === 68)
@@ -75,30 +108,9 @@ function startGame() {
     mouseX = mouseEvent.pageX;
     mouseY = mouseEvent.pageY;
   }
-
-  socket.on("initPlayer", (data) => {
-    // console.log(data)
-    game.init(data);
-  });
-
-  socket.on("update", function(data) {
-    console.log(data);
-    game.update(data);
-  });
-
-  socket.on("ImDead", (score) => {
-    game.addScore(Math.round(score[0]))
-    game.messager.addMessage("You killed " + score[1] + "!\n" + Math.round(score[0]) + " added to your score!");
-  });
-
-  socket.on("night", (night) => {
-    game.night = night;
-    game.messager.addMessage(night ? "it's night!" : "it's day!");
-  });
 }
 
 function stopGame() {
-  document.onkeydown = null;
   document.onkeydown = null;
   document.onkeyup = null;
   canvas.onmousemove = null;
@@ -106,7 +118,12 @@ function stopGame() {
   playMenu.classList.remove('hidden');
   canvas.classList.add("hidden")
   socket.emit("outGame", socket.id);
+  socket.prefScore = game.player.getNextScore();
   game = null;
+  document.onkeydown = event => {
+    if (event.keyCode === 13)
+      startGame();
+  };
   playButton.addEventListener("click", function() {
     startGame();
   });

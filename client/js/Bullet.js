@@ -1,7 +1,8 @@
 class Bullet {
-  constructor(id, from_id, x, y, angle) {
+  constructor(id, from_id, name, x, y, angle) {
     this.id = id;
     this.isFromId = from_id;
+    this.isFromName = name;
     this.x = x;
     this.y = y;
     this.angle = angle;
@@ -28,6 +29,7 @@ class Bullet {
     return {
       id: this.id,
       from_id: this.isFromId,
+      from_name: this.isFromName,
       x: this.x,
       y: this.y,
       r: this.radius,
