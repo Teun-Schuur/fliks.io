@@ -1,8 +1,9 @@
 class Game {
-  constructor(socket, name) {
+  constructor(socket, name, prfScore) {
     this.socket = socket;
     this.player = new Player(name);
     this.player.id = socket.id;
+    this.player.score = prfScore;
     this.foods = {};
     this.bullets = {};
     this.obsticals = {};
@@ -65,12 +66,15 @@ class Game {
             player.size)) {
           this.player.setHP(-consts.PLAYER_COLLITION_HP_LOSS);
           if (this.player.HP <= 0) {
+            console.log(player, this.player)
             this.messager.addMessage("You have been killed by " + player.name + "!");
             socket.emit("ImDead", {
               name: this.player.name,
               score: this.player.score,
               to: player.id
             })
+            stopGame()
+            break;
           }
           this.player.xSpeed *= 2;
           this.player.ySpeed *= 2;
@@ -102,15 +106,17 @@ class Game {
       let bul = new Bullet(
         ID(),
         this.player.id,
+        this.player.name,
         this.player.x,
         this.player.y,
-        this.player.angle
+        getAngle(mouseX - (this.player.x + this.viewport_x), mouseY - (this.player.y + this.viewport_y))
       );
       pacage.BULLET = bul.getPackage();
     }
     for (let b of toAdd.BULLETS) {
-      this.bullets[b.id] = new Bullet(b.id, b.from_id, b.x, b.y, b.angle);
+      this.bullets[b.id] = new Bullet(b.id, b.from_id, this.player.name, b.x, b.y, b.angle);
     }
+    var gameOver = false;
     for (let b in this.bullets) {
       var bul = this.bullets[b];
       if (bul.isFromId != this.player.id) {
@@ -119,14 +125,16 @@ class Game {
           this.player.setHP(-8);
           // bul.deadFrom = this.player.id;
           if (this.player.HP <= 0) {
-            this.messager.addMessage("You have been killed by " + bul.from_id + "!");
+            this.messager.addMessage("You have been killed by " + bul.from_name + "!");
             socket.emit("ImDead", {
               name: this.player.name,
               score: this.player.score,
               to: bul.isFromId
             })
+            stopGame()
           }
           pacage.REMOVE.push(b);
+          gameOver = true;
           break;
         }
       }
@@ -152,6 +160,13 @@ class Game {
     if (this.night) {
       ctx.restore()
     }
+    fill(255)
+    circle(mouseX, mouseY, 4)
+    circle(mouseX, mouseY, 20, false)
+    rect(mouseX - 30, mouseY, 20, 2)
+    rect(mouseX + 30, mouseY, -20, 2)
+    rect(mouseX, mouseY + 30, 2, -20)
+    rect(mouseX, mouseY - 30, 2, 20)
     this.render_UI();
 
     this.player.updatePosition();
