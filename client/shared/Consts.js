@@ -5,8 +5,8 @@ const consts = Object.freeze({
   FRAME_RATE: 60,
   VIEW_CIRCLE_MIN: 200,
   VIEW_CIRCLE_MAX: 700,
-  NIGHT: true,
-  DAY_NIGHT_TIME: 100, // in seconds
+  NIGHT: false,
+  DAY_NIGHT_TIME: 60, // in seconds
 
   // player
   PLAYER_HP: 100,
@@ -20,9 +20,10 @@ const consts = Object.freeze({
 
   // food
   FOOD_RADIUS: 10,
-  FOOD_SCORE: 4,
-  FOOD_RESPAN_RATE: 1,
-  MAX_FOOD_SPAN_PER_PLAYER: 70,
+  FOOD_SCORE: 2,
+  FOOD_SPAN_RATE_PER_PLAYER: 0.05,
+  MAX_FOOD_SPAN_PER_PLAYER: 50,
+  MAX_FOOD_TOTAL: 300,
   FOOD_LOSES_IF_DIE: 77, // %
 
   // bullet
@@ -42,7 +43,7 @@ const consts = Object.freeze({
   UI: {
     MESSAGES: {
       Y: 85, // - height
-      SPEED: 6, // seconds
+      SPEED: 2.5, // seconds
     }
   }
 

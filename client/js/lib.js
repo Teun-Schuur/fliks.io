@@ -30,10 +30,24 @@ function fill(r, g, b) {
   }
 }
 
+function getColor(r, g, b) {
+  if (Array.isArray(r)) {
+    ctx.fillStyle = "rgb(" + r[0] + ", " + r[1] + ", " + r[2] + ")";
+  } else {
+    if (g != null && b != null) {
+      return "rgb(" + r + ", " + g + ", " + b + ")";
+    } else {
+      return "rgb(" + r + ", " + r + ", " + r + ")";
+    }
+  }
+}
+
 function drawTriangle(PosX, PosY, radius, rotate) {
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, PosX, PosY); // Set position
   ctx.rotate(rotate); // set rotation in radians
+  ctx.shadowBlur = 20;
+  ctx.shadowColor = getColor(107, 159, 0);
   ctx.beginPath();
   var sides = 3;
   var a = (Math.PI * 2) / sides;
@@ -50,11 +64,12 @@ function drawTriangle(PosX, PosY, radius, rotate) {
   return true;
 }
 
-function rect(x, y, w, h) {
+function rect(x, y, w, h, fill = true) {
   ctx.beginPath();
   ctx.rect(x, y, w, h);
   ctx.closePath();
-  ctx.fill();
+  if (fill)
+    ctx.fill();
 }
 
 function clamp(value, min, max) {
@@ -63,11 +78,36 @@ function clamp(value, min, max) {
   return value;
 }
 
-function circle(x, y, r) {
+function circle(x, y, r, fill = true) {
   ctx.beginPath();
+  if (!fill) {
+    ctx.save();
+    ctx.lineWidth = "3";
+    ctx.strokeStyle = getColor(255, 255, 255);
+  }
   ctx.arc(x, y, r, 0, 2 * Math.PI, false);
-  ctx.closePath();
-  ctx.fill();
+  if (fill)
+    ctx.fill();
+  else {
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function getAngle(xSpeed, ySpeed) {
+  // return Math.atan(ys / xs)
+  let angle = 0;
+  if (ySpeed !== 0 && xSpeed !== 0) {
+    angle = Math.atan(ySpeed / xSpeed);
+    if (xSpeed < 0) {
+      angle += Math.PI;
+    }
+  } else if (ySpeed === 0 && Math.abs(xSpeed) > 0.1) {
+    angle = xSpeed > 0 ? 0 : (Math.PI / 180) * 180;
+  } else if (xSpeed === 0 && Math.abs(ySpeed) > 0.1) {
+    angle = ySpeed > 0 ? (Math.PI / 180) * 90 : (Math.PI / 180) * 270;
+  }
+  return angle;
 }
 
 function lineWeight(width) {
