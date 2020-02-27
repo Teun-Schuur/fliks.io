@@ -1,8 +1,8 @@
 class Player {
   constructor(name) {
     this.id = null;
-    this.x = consts.MAP_WIDTH / 2 + (Math.random() - 0.5) * 400;
-    this.y = consts.MAP_HEIGHT / 2 + (Math.random() - 0.5) * 400;
+    this.x = consts.MAP_WIDTH * Math.random();
+    this.y = consts.MAP_HEIGHT * Math.random();
     this.pressingRight = false;
     this.pressingLeft = false;
     this.pressingUp = false;
@@ -20,21 +20,11 @@ class Player {
     this.name = name;
   }
 
-  respan() {
-    this.x = Math.random() * consts.MAP_WIDTH;
-    this.y = consts.MAP_HEIGHT * Math.random();
-    this.score = this.score * ((100 - consts.FOOD_LOSES_IF_DIE) / 100);
-    this.points = this.points * ((100 - consts.FOOD_LOSES_IF_DIE) / 100);
-    this.HP = consts.PLAYER_HP;
-    this.xSpeed = 0;
-    this.ySpeed = 0;
+  getNextScore() {
+    return Math.round(this.score * ((100 - consts.FOOD_LOSES_IF_DIE) / 100));
   }
 
   updatePosition() {
-
-    if (this.HP <= 0) {
-      this.respan();
-    }
     if (this.pressingSpace && (this.frame % (consts.PLAYER_SHOOTING_SPEED * consts.FRAME_RATE) === 0)) {
       this.shoot = true;
     } else {
@@ -56,9 +46,6 @@ class Player {
       if (this.pressingDown) this.ySpeed += consts.SPEED;
     }
     this.frame++;
-    if (this.score > 50) {
-      stopGame()
-    }
     this.ySpeed *= consts.RESISTENCE;
     this.xSpeed *= consts.RESISTENCE;
     if (Math.abs(this.ySpeed) < 0.01) {
