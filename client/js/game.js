@@ -160,6 +160,8 @@ class Game {
     if (this.night) {
       ctx.restore()
     }
+
+    // aiming thing
     fill(255)
     circle(mouseX, mouseY, 4)
     circle(mouseX, mouseY, 20, false)
@@ -167,7 +169,8 @@ class Game {
     rect(mouseX + 30, mouseY, -20, 2)
     rect(mouseX, mouseY + 30, 2, -20)
     rect(mouseX, mouseY - 30, 2, 20)
-    this.render_UI();
+
+    this.render_UI(players);
 
     this.player.updatePosition();
 
@@ -202,11 +205,31 @@ class Game {
     drawTriangle(data.x + this.viewport_x, data.y + this.viewport_y, data.size, data.angle);
   }
 
-  render_UI() {
+  render_UI(players) {
+    //leaderboard
+    ctx.fillStyle = "rgba(255, 255, 255, 0.2)"
+    roundRect(WIDTH - 210, 0, 210, 280, {
+      tl: 0,
+      tr: 0,
+      br: 0,
+      bl: 12
+    }, true, false)
+    players.sort((a, b) => b.score - a.score);
+    ctx.font = "30px Calibri";
+    fill(200, 200, 200)
+    for (let i = 0; i < 7 && players[i] != undefined; i++) {
+      ctx.fillText((i + 1) + ": " + players[i].name, WIDTH - 200, i * 40 + 30);
+    }
+
+    //score
     ctx.font = "30px Calibri";
     fill(200)
     ctx.fillText("score: " + this.player.score, 10, 30);
+
+    //hp bar
     hp_bar(this.player.HP)
+
+    //messages
     this.messager.render();
   }
 

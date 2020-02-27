@@ -70,7 +70,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function startGame() {
   playMenu.classList.add('hidden');
   canvas.classList.remove("hidden")
-  game = new Game(socket, usernameInput.value, socket.prefScore);
+  var name = usernameInput.value;
+  game = new Game(socket, name == "" ? "player_" + ID(4) : name, socket.prefScore);
   play = true;
   socket.emit("inGame", [socket.id, game.player.getPackage()]);
 
