@@ -17,6 +17,7 @@ const consts = Object.freeze({
   SPEED: 1,
   RESISTENCE: 0.92, // 1 = nothing, 0 = cant move
   POINTS_GET_IF_KILED: 0.8, // 1 = everything, 0 = nothing
+  POINTS_GIT_IF_KILED_MIN: 20, // points
 
   // food
   FOOD_RADIUS: 10,

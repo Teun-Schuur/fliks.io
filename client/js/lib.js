@@ -42,12 +42,12 @@ function getColor(r, g, b) {
   }
 }
 
-function drawTriangle(PosX, PosY, radius, rotate) {
+function drawTriangle(PosX, PosY, radius, rotate, col) {
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, PosX, PosY); // Set position
   ctx.rotate(rotate); // set rotation in radians
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = getColor(107, 159, 0);
+  ctx.shadowBlur = 22;
+  ctx.shadowColor = col;
   ctx.beginPath();
   var sides = 3;
   var a = (Math.PI * 2) / sides;
@@ -217,7 +217,7 @@ function circlePoint(cx, cy, cr, px, py) {
 }
 
 function circleRect(cx, cy, radius, rx, ry, rw, rh) {
-  var loat testX = cx;
+  var testX = cx;
   var testY = cy;
   if (cx < rx) testX = rx; // test left edge
   else if (cx > rx + rw) testX = rx + rw; // right edge

@@ -213,14 +213,23 @@ class Game {
   }
 
   render_player(data) {
+    let col;
+    ctx.save()
     if (data.id === this.player.id) {
-      fill(consts.COLORS.player_self);
+      col = consts.COLORS.player_self
+      fill(col);
       // drawTriangle(d, HEIGHT / 2, data.size, data.angle);
     } else {
-      fill(map(data.hp, 0, 100, 0, 255), 40, 255 - map(data.hp, 0, 100, 0, 255))
+      col = [map(data.hp, 0, 100, 0, 255), 40, 255 - map(data.hp, 0, 100, 0, 255)]
+      fill(col)
       // fill(consts.COLORS.player_other);
     }
-    drawTriangle(data.x + this.viewport_x, data.y + this.viewport_y, data.size, data.angle);
+    drawTriangle(data.x + this.viewport_x, data.y + this.viewport_y, data.size, data.angle, getColor(
+      col[0] * 1.3,
+      col[1] * 1.3,
+      col[2] * 1.3,
+    ));
+    ctx.restore();
   }
 
   render_UI(players) {
