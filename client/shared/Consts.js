@@ -30,6 +30,7 @@ const consts = Object.freeze({
   BULLET_SPEED: 15,
   BULLET_COST: 2,
   BULLET_RADIUS: 10,
+  BULLET_LIFETIME: 60, // frames
 
   // colors
   COLORS: {

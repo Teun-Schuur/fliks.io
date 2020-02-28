@@ -147,10 +147,11 @@ class Game {
 
     // obsticals
     for (let o of toAdd.OBSTICALS) {
-      this.obsticals[o.id] = new Bullet(o.id, o.from, o.x, o.y, o.r);
+      console.log(o)
+      this.obsticals[o.id] = new Obstical(o.id, o.x, o.y, o.r);
     }
     for (let o in this.obsticals) {
-      this.render_obstical(obs[o]);
+      this.render_obstical(this.obsticals[o]);
     }
 
     // render player
@@ -185,8 +186,9 @@ class Game {
   }
 
   render_obstical(data) {
+    // console.log(data.x)
     fill(consts.COLORS.obstical);
-    circle(data.x, data.y, data.r);
+    circle(data.x + this.viewport_x, data.y + this.viewport_y, data.r);
   }
 
   render_food(data) {
@@ -207,16 +209,16 @@ class Game {
 
   render_UI(players) {
     //leaderboard
-    ctx.fillStyle = "rgba(255, 255, 255, 0.2)"
-    roundRect(WIDTH - 210, 0, 210, 280, {
+    ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+    roundRect(WIDTH - 210, 0, 210, 290, {
       tl: 0,
       tr: 0,
       br: 0,
-      bl: 12
-    }, true, false)
+      bl: 40
+    }, true, false);
     players.sort((a, b) => b.score - a.score);
     ctx.font = "30px Calibri";
-    fill(200, 200, 200)
+    fill(200, 200, 200);
     for (let i = 0; i < 7 && players[i] != undefined; i++) {
       ctx.fillText((i + 1) + ": " + players[i].name, WIDTH - 200, i * 40 + 30);
     }

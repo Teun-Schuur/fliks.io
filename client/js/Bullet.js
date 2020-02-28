@@ -10,9 +10,11 @@ class Bullet {
     this.ySpeed = consts.BULLET_SPEED * Math.sin(angle);
     this.radius = consts.BULLET_RADIUS;
     this.deadFrom = null;
+    this.lifeTime = consts.BULLET_LIFETIME;
   }
 
   update() {
+    this.lifeTime--;
     this.x += this.xSpeed;
     this.y += this.ySpeed;
     if (
@@ -20,6 +22,8 @@ class Bullet {
       this.x < 0 ||
       this.x > consts.MAP_HEIGHT ||
       this.y < 0) {
+      return true;
+    } else if (this.lifeTime <= 0) {
       return true;
     }
     return false;

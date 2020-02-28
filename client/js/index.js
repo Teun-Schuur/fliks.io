@@ -85,8 +85,8 @@ function startGame() {
       game.player.pressingLeft = true;
     else if (event.keyCode === 87)
       game.player.pressingUp = true;
-    else if (event.keyCode === 32)
-      game.player.pressingSpace = true;
+    // else if (event.keyCode === 32)
+    //   game.player.pressingSpace = true;
     // else if (event.keyCode === 77)
     //   game.night = !game.night;
   };
@@ -100,10 +100,18 @@ function startGame() {
       game.player.pressingLeft = false;
     else if (event.keyCode === 87)
       game.player.pressingUp = false;
-    else if (event.keyCode === 32) {
-      game.player.pressingSpace = false;
-    }
+    // else if (event.keyCode === 32) {
+    // game.player.pressingSpace = false;
+    // }
   };
+
+  document.onmousedown = function() {
+    game.player.pressingMouse = true;
+  }
+
+  document.onmouseup = function() {
+    game.player.pressingMouse = false;
+  }
 
   canvas.onmousemove = (mouseEvent) => {
     mouseX = mouseEvent.pageX;
