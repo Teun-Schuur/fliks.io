@@ -52,7 +52,7 @@ class Game {
         this.sockets.get(id).emit("night", this.night);
       }
     }
-    if (this.frameCount % 300 === 0) {
+    if (this.frameCount % 300 === 0 && Object.keys(this.obsticals).length < 5) {
       let obstical = {
         id: ID(),
         x: Math.random() * Consts.MAP_WIDTH,

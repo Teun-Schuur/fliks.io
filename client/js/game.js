@@ -186,14 +186,30 @@ class Game {
   }
 
   render_obstical(data) {
+    ctx.save();
     fill(consts.COLORS.obstical);
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = getColor(
+      consts.COLORS.obstical[0] * 1.3,
+      consts.COLORS.obstical[1] * 1.3,
+      consts.COLORS.obstical[2] * 1.3,
+    );
     circle(data.x + this.viewport_x, data.y + this.viewport_y, data.radius);
-    ctx.stroke();
+    ctx.restore();
   }
 
   render_food(data) {
+    ctx.save();
     fill(data.col);
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = getColor(
+      data.col[0] * 1.3,
+      data.col[1] * 1.3,
+      data.col[2] * 1.3,
+    );
     circle(data.x + this.viewport_x, data.y + this.viewport_y, consts.FOOD_RADIUS);
+    ctx.restore();
+
   }
 
   render_player(data) {

@@ -210,5 +210,20 @@ function roundRect(x, y, width, height, radius, fill, stroke) {
   if (stroke) {
     ctx.stroke();
   }
+}
 
+function circlePoint(cx, cy, cr, px, py) {
+  return ((px - cx) ** 2) + (py - cy) ** 2 <= cr * cr
+}
+
+function circleRect(cx, cy, radius, rx, ry, rw, rh) {
+  var loat testX = cx;
+  var testY = cy;
+  if (cx < rx) testX = rx; // test left edge
+  else if (cx > rx + rw) testX = rx + rw; // right edge
+  if (cy < ry) testY = ry; // top edge
+  else if (cy > ry + rh) testY = ry + rh; // bottom edge
+  var distX = cx - testX;
+  var distY = cy - testY;
+  return (distX * distX) + (distY * distY) <= radius * radius
 }
