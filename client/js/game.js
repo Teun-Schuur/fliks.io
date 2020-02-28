@@ -147,11 +147,11 @@ class Game {
 
     // obsticals
     for (let o of toAdd.OBSTICALS) {
-      console.log(o)
       this.obsticals[o.id] = new Obstical(o.id, o.x, o.y, o.r);
     }
-    for (let o in this.obsticals) {
-      this.render_obstical(this.obsticals[o]);
+    for (let o_id in this.obsticals) {
+      let o = this.obsticals[o_id];
+      this.render_obstical(o);
     }
 
     // render player
@@ -186,9 +186,9 @@ class Game {
   }
 
   render_obstical(data) {
-    // console.log(data.x)
     fill(consts.COLORS.obstical);
-    circle(data.x + this.viewport_x, data.y + this.viewport_y, data.r);
+    circle(data.x + this.viewport_x, data.y + this.viewport_y, data.radius);
+    ctx.stroke();
   }
 
   render_food(data) {

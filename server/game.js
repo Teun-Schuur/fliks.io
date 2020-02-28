@@ -52,7 +52,7 @@ class Game {
         this.sockets.get(id).emit("night", this.night);
       }
     }
-    if (this.frameCount % 60 === 0) {
+    if (this.frameCount % 300 === 0) {
       let obstical = {
         id: ID(),
         x: Math.random() * Consts.MAP_WIDTH,
@@ -61,7 +61,7 @@ class Game {
       }
       this.pack.ADD.OBSTICALS.push(obstical);
       this.obsticals[obstical.id] = obstical;
-      console.log(obstical.id)
+      // console.log(obstical.id)
     }
 
     // food
