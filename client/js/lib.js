@@ -130,14 +130,14 @@ const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2
 
 function hp_bar(hp) {
   var x = WIDTH / 8;
-  var w = WIDTH - WIDTH / 4;
-  var y = HEIGHT - 60;
-  var h = 40;
-  var length = map(hp, 0, 100, 0, w - 20);
+  var w = WIDTH - WIDTH / 5;
+  var y = HEIGHT - 40;
+  var h = 25;
+  var length = map(hp, 0, 100, 0, w - 10);
   fill(100, 100, 100);
   rect(x, y, w, h);
   fill(255, 0, 0)
-  rect(x + 10, y + 10, length, h - 20);
+  rect(x + 5, y + 5, length, h - 10);
 }
 
 function rectCol(x1, y1, w1, h1, x2, y2, w2, h2) {

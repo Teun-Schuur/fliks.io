@@ -7,7 +7,7 @@ class Player {
     this.pressingLeft = false;
     this.pressingUp = false;
     this.pressingDown = false;
-    this.pressingSpace = false;
+    this.pressingMouse = false;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.angle = 0;
@@ -25,7 +25,7 @@ class Player {
   }
 
   updatePosition() {
-    if (this.pressingSpace && (this.frame % (consts.PLAYER_SHOOTING_SPEED * consts.FRAME_RATE) === 0)) {
+    if (this.pressingMouse && (this.frame % (consts.PLAYER_SHOOTING_SPEED * consts.FRAME_RATE) === 0)) {
       this.shoot = true;
     } else {
       this.shoot = false;

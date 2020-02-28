@@ -52,6 +52,18 @@ class Game {
         this.sockets.get(id).emit("night", this.night);
       }
     }
+    if (this.frameCount % 60 === 0) {
+      let obstical = {
+        id: ID(),
+        x: Math.random() * Consts.MAP_WIDTH,
+        y: Math.random() * Consts.MAP_HEIGHT,
+        r: Math.random() * 75 + 50
+      }
+      this.pack.ADD.OBSTICALS.push(obstical);
+      this.obsticals[obstical.id] = obstical;
+      console.log(obstical.id)
+    }
+
     // food
     if (Object.keys(this.foods).length < Consts.MAX_FOOD_SPAN_PER_PLAYER * this.players.size && Object.keys(this.foods).length < Consts.MAX_FOOD_TOTAL) {
       if (Math.random() < (Consts.FOOD_SPAN_RATE_PER_PLAYER * this.players.size)) {
