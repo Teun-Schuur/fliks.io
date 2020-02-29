@@ -4,6 +4,7 @@ class Obstical {
     this.x = x;
     this.y = y;
     this.radius = r;
+    this.hp = consts.OBSTICAL_HP * r;
   }
 
 
