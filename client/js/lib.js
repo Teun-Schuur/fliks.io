@@ -225,7 +225,7 @@ function circleRect(cx, cy, radius, rx, ry, rw, rh) {
   else if (cy > ry + rh) testY = ry + rh; // bottom edge
   var distX = cx - testX;
   var distY = cy - testY;
-  return (distX * distX) + (distY * distY) <= radius * radius
+  return (distX * distX) + (distY * distY) <= radius * radius;
 }
 
 
@@ -235,16 +235,26 @@ class Vector {
     this.y = y;
   }
 
+  lim(limit) {
+    if (this.x > limit) {
+      this.x = limit;
+    }
+    if (this.y > limit) {
+      this.y = limit;
+    }
+  }
+
+
   static add(vec1, vec2) {
-    return new Vector(vec1.x + vec2.x, vec1.y + vec2.y)
+    return new Vector(vec1.x + vec2.x, vec1.y + vec2.y);
   }
 
   static sub(vec1, vec2) {
-    return new Vector(vec1.x - vec2.x, this.y - vec2.y)
+    return new Vector(vec1.x - vec2.x, this.y - vec2.y);
   }
 
   static mul(val) {
-    return new Vector(vec1.x * val, vec1.y * val)
+    return new Vector(vec1.x * val, vec1.y * val);
   }
 
   add(vec) {
@@ -276,6 +286,10 @@ class Vector {
     if (m > 0) {
       this.div(m)
     }
+  }
+
+  dot(vec) {
+    return this.x * vec.x + this.y * vec.y;
   }
 
   static vectorOutAngle(angle) {

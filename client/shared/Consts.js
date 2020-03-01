@@ -34,7 +34,7 @@ const consts = Object.freeze({
   BULLET_LIFETIME: 60, // frames
 
   // obstical
-  OBSTICAL_HP: 0.8 // * it's radius
+  OBSTICAL_HP: 0.8, // * it's radius
   DESTROID_POINTS: 1, // * it's begin hp
 
 

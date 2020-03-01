@@ -194,7 +194,7 @@ class Game {
       consts.COLORS.obstical[1] * 1.3,
       consts.COLORS.obstical[2] * 1.3,
     );
-    circle(data.x + this.viewport_x, data.y + this.viewport_y, data.radius);
+    circle(data.pos.x + this.viewport_x, data.pos.y + this.viewport_y, data.radius);
     ctx.restore();
   }
 
