@@ -9,8 +9,8 @@ class Game {
     this.obsticals = {};
     this.night = consts.NIGHT;
     this.messager = new Message();
-    this.viewport_x = clamp(-this.player.x + canvas.width / 2, canvas.width - consts.MAP_WIDTH, 0);
-    this.viewport_y = clamp(-this.player.y + canvas.height / 2, canvas.height - consts.MAP_HEIGHT, 0);
+    this.viewport_x = clamp(-this.player.pos.x + canvas.width / 2, canvas.width - consts.MAP_WIDTH, 0);
+    this.viewport_y = clamp(-this.player.pos.y + canvas.height / 2, canvas.height - consts.MAP_HEIGHT, 0);
   }
 
   init(pack) {
@@ -50,14 +50,14 @@ class Game {
     // player
     for (let player of players) {
       if (player.id === this.player.id) {
-        this.viewport_x = -this.player.x + canvas.width / 2;
-        this.viewport_y = -this.player.y + canvas.height / 2;
+        this.viewport_x = -this.player.pos.x + canvas.width / 2;
+        this.viewport_y = -this.player.pos.y + canvas.height / 2;
         this.viewport_x = clamp(this.viewport_x, canvas.width - consts.MAP_WIDTH, 0);
         this.viewport_y = clamp(this.viewport_y, canvas.height - consts.MAP_HEIGHT, 0);
       } else {
         if (rectCol(
-            this.player.x,
-            this.player.y,
+            this.player.pos.x,
+            this.player.pos.y,
             this.player.size,
             this.player.size,
             player.x,
@@ -76,10 +76,7 @@ class Game {
             stopGame()
             break;
           }
-          this.player.xSpeed *= 2;
-          this.player.ySpeed *= 2;
-          this.player.xSpeed *= -1;
-          this.player.ySpeed *= -1;
+          this.player.vel.mul(-2);
         }
       }
     }
@@ -91,7 +88,7 @@ class Game {
     pacage.REMOVE = [];
     for (let f_id in this.foods) {
       let f = this.foods[f_id];
-      if (rectPoint(this.player.x - this.player.size, this.player.y - this.player.size, this.player.size * 2, this.player.size * 2, f.x, f.y)) {
+      if (rectPoint(this.player.pos.x - this.player.size, this.player.pos.y - this.player.size, this.player.size * 2, this.player.size * 2, f.x, f.y)) {
         this.player.score += consts.FOOD_SCORE;
         this.player.points += consts.FOOD_SCORE;
         pacage.REMOVE.push(f_id);
@@ -107,9 +104,9 @@ class Game {
         ID(),
         this.player.id,
         this.player.name,
-        this.player.x,
-        this.player.y,
-        getAngle(mouseX - (this.player.x + this.viewport_x), mouseY - (this.player.y + this.viewport_y))
+        this.player.pos.x,
+        this.player.pos.y,
+        getAngle(mouseX - (this.player.pos.x + this.viewport_x), mouseY - (this.player.pos.y + this.viewport_y))
       );
       pacage.BULLET = bul.getPackage();
     }
@@ -120,7 +117,7 @@ class Game {
     for (let b in this.bullets) {
       var bul = this.bullets[b];
       if (bul.isFromId != this.player.id) {
-        if (rectPoint(this.player.x - this.player.size, this.player.y - this.player.size, this.player.size * 2, this.player.size * 2, bul.x, bul.y)) {
+        if (rectPoint(this.player.pos.x - this.player.size, this.player.pos.y - this.player.size, this.player.size * 2, this.player.size * 2, bul.x, bul.y)) {
           console.log("HP: ", this.player.HP);
           this.player.setHP(-8);
           // bul.deadFrom = this.player.id;
@@ -148,9 +145,25 @@ class Game {
     // obsticals
     for (let o of toAdd.OBSTICALS) {
       this.obsticals[o.id] = new Obstical(o.id, o.x, o.y, o.r);
+      // this.obsticals[o.id].vel.add(new Vector((0.5 - Math.random()) * 5, (0.5 - Math.random()) * 5));
     }
     for (let o_id in this.obsticals) {
       let o = this.obsticals[o_id];
+      if (circleCircle(o.pos.x, o.pos.y, o.radius, this.player.pos.x, this.player.pos.y, this.player.size / 2)) {
+        o.collision(this.player)
+        socket.emit("obsticalCollision", {
+          id: o.id,
+          hp: o.hp,
+          x: o.pos.x,
+          y: o.pos.y,
+          xs: o.vel.x,
+          ys: o.vel.y,
+        })
+      }
+      for (let b in this.bullets) {
+        var bul = this.bullets[b];
+      }
+      o.update();
       this.render_obstical(o);
     }
 

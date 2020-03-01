@@ -38,6 +38,9 @@ io.on("connection", function(socket) {
   socket.on("ImDead", (data) => {
     game.giveScore(data);
   });
+  socket.on("obsticalCollision", data => {
+    game.handleObsticalCollision(data);
+  })
 });
 
 

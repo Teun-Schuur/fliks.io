@@ -5,8 +5,8 @@ const consts = Object.freeze({
   FRAME_RATE: 60,
   VIEW_CIRCLE_MIN: 200,
   VIEW_CIRCLE_MAX: 700,
-  NIGHT: true,
-  DAY_NIGHT_TIME: 60, // in seconds
+  NIGHT: false,
+  DAY_NIGHT_TIME: 6000, // in seconds
 
   // player
   PLAYER_HP: 100,

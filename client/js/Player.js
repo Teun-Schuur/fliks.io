@@ -3,13 +3,13 @@ class Player {
     this.id = null;
     this.x = consts.MAP_WIDTH * Math.random();
     this.y = consts.MAP_HEIGHT * Math.random();
+    this.pos = new Vector(consts.MAP_WIDTH * Math.random(), consts.MAP_HEIGHT * Math.random())
     this.pressingRight = false;
     this.pressingLeft = false;
     this.pressingUp = false;
     this.pressingDown = false;
     this.pressingMouse = false;
-    this.xSpeed = 0;
-    this.ySpeed = 0;
+    this.vel = new Vector(0, 0)
     this.angle = 0;
     this.size = consts.PLAYER_SIZE;
     this.frame = 0;
@@ -35,48 +35,41 @@ class Player {
       (this.pressingLeft && this.pressingUp) ||
       (this.pressingRight && this.pressingDown) ||
       (this.pressingLeft && this.pressingDown)) {
-      if (this.pressingRight) this.xSpeed += consts.SPEED * 0.75;
-      if (this.pressingLeft) this.xSpeed -= consts.SPEED * 0.75;
-      if (this.pressingUp) this.ySpeed -= consts.SPEED * 0.75;
-      if (this.pressingDown) this.ySpeed += consts.SPEED * 0.75;
+      if (this.pressingRight) this.vel.x += consts.SPEED * 0.75;
+      if (this.pressingLeft) this.vel.x -= consts.SPEED * 0.75;
+      if (this.pressingUp) this.vel.y -= consts.SPEED * 0.75;
+      if (this.pressingDown) this.vel.y += consts.SPEED * 0.75;
     } else {
-      if (this.pressingRight) this.xSpeed += consts.SPEED;
-      if (this.pressingLeft) this.xSpeed -= consts.SPEED;
-      if (this.pressingUp) this.ySpeed -= consts.SPEED;
-      if (this.pressingDown) this.ySpeed += consts.SPEED;
+      if (this.pressingRight) this.vel.x += consts.SPEED;
+      if (this.pressingLeft) this.vel.x -= consts.SPEED;
+      if (this.pressingUp) this.vel.y -= consts.SPEED;
+      if (this.pressingDown) this.vel.y += consts.SPEED;
     }
     this.frame++;
-    this.ySpeed *= consts.RESISTENCE;
-    this.xSpeed *= consts.RESISTENCE;
-    if (Math.abs(this.ySpeed) < 0.01) {
-      this.ySpeed = 0;
-    }
-    if (Math.abs(this.xSpeed) < 0.01) {
-      this.xSpeed = 0;
-    }
-    this.y += this.ySpeed;
-    this.x += this.xSpeed;
+    this.vel.mul(consts.RESISTENCE)
+    this.vel.trashold(0.02);
+    this.pos.add(this.vel)
     if (this.x + this.size > consts.MAP_WIDTH) {
-      this.x = consts.MAP_WIDTH - this.size;
+      this.pos.x = consts.MAP_WIDTH - this.size;
     }
-    if (this.x - this.size < 0) {
-      this.x = this.size;
+    if (this.pos.x - this.size < 0) {
+      this.pos.x = this.size;
     }
-    if (this.y + this.size > consts.MAP_HEIGHT) {
-      this.y = consts.MAP_HEIGHT - this.size;
+    if (this.pos.y + this.size > consts.MAP_HEIGHT) {
+      this.pos.y = consts.MAP_HEIGHT - this.size;
     }
-    if (this.y - this.size < 0) {
-      this.y = this.size;
+    if (this.pos.y - this.size < 0) {
+      this.pos.y = this.size;
     }
-    if (this.ySpeed !== 0 && this.xSpeed !== 0) {
-      this.angle = Math.atan(this.ySpeed / this.xSpeed);
-      if (this.xSpeed < 0) {
+    if (this.vel.y !== 0 && this.vel.x !== 0) {
+      this.angle = Math.atan(this.vel.y / this.vel.x);
+      if (this.vel.x < 0) {
         this.angle += Math.PI;
       }
-    } else if (this.ySpeed === 0 && Math.abs(this.xSpeed) > 0.1) {
-      this.angle = this.xSpeed > 0 ? 0 : (Math.PI / 180) * 180;
-    } else if (this.xSpeed === 0 && Math.abs(this.ySpeed) > 0.1) {
-      this.angle = this.ySpeed > 0 ? (Math.PI / 180) * 90 : (Math.PI / 180) * 270;
+    } else if (this.vel.y === 0 && Math.abs(this.vel.x) > 0.1) {
+      this.angle = this.vel.x > 0 ? 0 : (Math.PI / 180) * 180;
+    } else if (this.vel.x === 0 && Math.abs(this.vel.y) > 0.1) {
+      this.angle = this.vel.y > 0 ? (Math.PI / 180) * 90 : (Math.PI / 180) * 270;
     }
   }
 
@@ -99,8 +92,8 @@ class Player {
   getPackage() {
     return {
       id: this.id,
-      x: this.x,
-      y: this.y,
+      x: this.pos.x,
+      y: this.pos.y,
       angle: this.angle,
       size: this.size,
       hp: this.HP,

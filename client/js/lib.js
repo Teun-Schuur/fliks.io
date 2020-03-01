@@ -228,6 +228,10 @@ function circleRect(cx, cy, radius, rx, ry, rw, rh) {
   return (distX * distX) + (distY * distY) <= radius * radius;
 }
 
+function circleCircle(p1x, p1y, r1, p2x, p2y, r2) {
+  return ((r1 + r2) * (r1 + r2) > ((p1x - p2x) * (p1x - p2x)) + ((p1y - p2y) * (p1y - p2y)))
+}
+
 
 class Vector {
   constructor(x, y) {
@@ -238,17 +242,21 @@ class Vector {
   lim(limit) {
     if (this.x > limit) {
       this.x = limit;
+    } else if (this.x < -limit) {
+      this.x = -limit;
     }
     if (this.y > limit) {
       this.y = limit;
+    } else if (this.y < -limit) {
+      this.y = -limit;
     }
   }
 
   trashold(tr) {
-    if (this.x < tr) {
+    if (Math.abs(this.x) < tr) {
       this.x = 0;
     }
-    if (this.y < tr) {
+    if (Math.abs(this.y) < tr) {
       this.y = 0;
     }
   }
@@ -259,11 +267,11 @@ class Vector {
   }
 
   static sub(vec1, vec2) {
-    return new Vector(vec1.x - vec2.x, this.y - vec2.y);
+    return new Vector(vec1.x - vec2.x, vec1.y - vec2.y);
   }
 
-  static mul(val) {
-    return new Vector(vec1.x * val, vec1.y * val);
+  static mul(vec, val) {
+    return new Vector(vec.x * val, vec.y * val);
   }
 
   add(vec) {
@@ -295,6 +303,11 @@ class Vector {
     if (m > 0) {
       this.div(m)
     }
+    return this.copy()
+  }
+
+  copy() {
+    return new Vector(this.x, this.y);
   }
 
   dot(vec) {
