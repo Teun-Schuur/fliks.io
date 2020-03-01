@@ -21,7 +21,7 @@ class Obstical {
     mtd = delta.mul(((this.radius + player.size / 2) - d) / d);
 
     im1 = this.radius * 0.5; // TODO:
-    im2 = 1 / 5; // TODO:
+    im2 = 1 / consts.PLAYER_MASS; // TODO:
 
     this.pos.add(mtd.mul(im1 / (im1 + im2)));
     player.pos.sub(mtd.mul(im1 / (im1 + im2)));

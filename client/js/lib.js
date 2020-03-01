@@ -244,6 +244,15 @@ class Vector {
     }
   }
 
+  trashold(tr) {
+    if (this.x < tr) {
+      this.x = 0;
+    }
+    if (this.y < tr) {
+      this.y = 0;
+    }
+  }
+
 
   static add(vec1, vec2) {
     return new Vector(vec1.x + vec2.x, vec1.y + vec2.y);
