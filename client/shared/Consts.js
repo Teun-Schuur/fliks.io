@@ -33,6 +33,11 @@ const consts = Object.freeze({
   BULLET_RADIUS: 10,
   BULLET_LIFETIME: 60, // frames
 
+  // obstical
+  OBSTICAL_HP: 0.8 // * it's radius
+  DESTROID_POINTS: 1, // * it's begin hp
+
+
   // colors
   COLORS: {
     bullet: [192, 192, 192],

@@ -227,3 +227,62 @@ function circleRect(cx, cy, radius, rx, ry, rw, rh) {
   var distY = cy - testY;
   return (distX * distX) + (distY * distY) <= radius * radius
 }
+
+
+class Vector {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  static add(vec1, vec2) {
+    return new Vector(vec1.x + vec2.x, vec1.y + vec2.y)
+  }
+
+  static sub(vec1, vec2) {
+    return new Vector(vec1.x - vec2.x, this.y - vec2.y)
+  }
+
+  static mul(val) {
+    return new Vector(vec1.x * val, vec1.y * val)
+  }
+
+  add(vec) {
+    this.x += vec.x;
+    this.y += vec.y;
+  }
+
+  sub(vec) {
+    this.x -= vec.x;
+    this.y -= vec.y;
+  }
+
+  mul(val) {
+    this.x *= val;
+    this.y *= val;
+  }
+
+  div(val) {
+    this.x /= val;
+    this.y /= val;
+  }
+
+  mag() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  normalize() {
+    var m = this.mag();
+    if (m > 0) {
+      this.div(m)
+    }
+  }
+
+  static vectorOutAngle(angle) {
+    return new Vector(0, 0);
+  }
+
+  static angleOutVector(vec) {
+    return 0;
+  }
+}
