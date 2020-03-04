@@ -16,6 +16,7 @@ class Game {
     this.pack.ADD.FOODS = [];
     this.pack.ADD.OBSTICALS = [];
     this.pack.PLAYERS = []; // all the players info
+    this.pack.OBSTICALS = []; // if obstical colide with player
 
     this.frameCount = 0;
 
@@ -98,6 +99,7 @@ class Game {
     }
     pack.PLAYERS = Object.values(this.players);
     pack.REMOVE = [];
+    pack.OBSTICALS = [];
     this.sockets.get(id).emit("initPlayer", pack)
     this.sockets.get(id).emit("night", this.night);
     this.players.set(id, data);
@@ -112,15 +114,15 @@ class Game {
 
   giveScore(data) {
     try {
-      this.sockets.get(data.to).emit("ImDead", [data.score, data.name])
+      this.sockets.get(data.to).emit("ImDead", [data.score, data.name, data.x, data.y])
     } catch (e) {
       console.log(e + " ... " + data)
     }
   }
 
+
   // client will send a mesage back with the objects that need to be added or removed.
   onReturnUpdate(id, data) {
-    // console.log(data)
     let toRemove = data.REMOVE;
     for (let id of toRemove) {
       this.pack.REMOVE.push(id);
@@ -136,6 +138,10 @@ class Game {
       this.bullets[data.BULLET.id] = data.BULLET;
       this.pack.ADD.BULLETS.push(data.BULLET);
     }
+
+    if (data.OBSTICAL != null || data.OBSTICAL != undefined) {
+      this.pack.OBSTICALS.push(data.OBSTICAL);
+    }
   }
 
   sendPackage() {
@@ -150,6 +156,7 @@ class Game {
     this.pack.ADD.BULLETS = [];
     this.pack.ADD.FOODS = [];
     this.pack.ADD.OBSTICALS = [];
+    this.pack.OBSTICALS = [];
     this.pack.PLAYERS = []; // all the players info
   }
 }

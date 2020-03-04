@@ -2,7 +2,7 @@ const consts = Object.freeze({
   // view
   MAP_WIDTH: 2200,
   MAP_HEIGHT: 2200,
-  FRAME_RATE: 60,
+  FRAME_RATE: 50,
   VIEW_CIRCLE_MIN: 200,
   VIEW_CIRCLE_MAX: 700,
   NIGHT: false,
@@ -11,7 +11,7 @@ const consts = Object.freeze({
   // player
   PLAYER_HP: 100,
   PLAYER_SIZE: 52,
-  PLAYER_SHOOTING_SPEED: 0.05,
+  PLAYER_SHOOTING_SPEED: 0.05, // bigger = slower
   PLAYER_COLLITION_HP_LOSS: 4,
   BEGIN_HP: 100,
   SPEED: 1,

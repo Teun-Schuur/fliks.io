@@ -234,7 +234,7 @@ function circleCircle(p1x, p1y, r1, p2x, p2y, r2) {
 
 
 class Vector {
-  constructor(x, y) {
+  constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
   }
@@ -314,11 +314,56 @@ class Vector {
     return this.x * vec.x + this.y * vec.y;
   }
 
+  random(range) {
+    this.x = (Math.random() - 0.5) * range * 2
+    this.y = (Math.random() - 0.5) * range * 2
+  }
+
+  reset() {
+    this.x = 0;
+    this.y = 0;
+    return this;
+  }
+
   static vectorOutAngle(angle) {
     return new Vector(0, 0);
   }
 
   static angleOutVector(vec) {
     return 0;
+  }
+
+  randomWalk(off) {
+    this.x += (Math.random() - 0.5) * off * 2;
+    this.y += (Math.random() - 0.5) * off * 2;
+    return this;
+  }
+
+  set(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class Particle {
+  constructor(pos, power) {
+    this.pos = pos;
+    this.vel = new Vector();
+    this.vel.random(power);
+    this.radius = Math.random() * power;
+    var r = Math.random() * 256;
+    var g = Math.random() * (256 - r);
+    this.col = [r, g, 255 - r - g];
+  }
+
+  update() {
+    this.pos.add(this.vel);
+    this.vel.mul(0.99);
+    this.radius *= 0.95
+  }
+
+  render(viewport_x, viewport_y) {
+    fill(this.col)
+    circle(this.pos.x + viewport_x, this.pos.y + viewport_y, this.radius);
   }
 }

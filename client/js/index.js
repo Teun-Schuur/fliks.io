@@ -4,7 +4,7 @@ socket = io();
 socket.on("init", () => {
   console.log("connection made!")
 });
-socket.prefScore = 0;
+socket.prefScore = 1000;
 
 let WIDTH = NaN;
 let HEIGHT = NaN;
@@ -35,10 +35,13 @@ socket.on("update", function(data) {
   }
 });
 
-socket.on("ImDead", (score) => {
+socket.on("ImDead", (data) => {
   if (game != null) {
-    game.player.score += Math.max(Math.round(score[0] * consts.POINTS_GET_IF_KILED), consts.POINTS_GIT_IF_KILED_MIN)
-    game.messager.addMessage("You killed " + score[1] + "!\n" + Math.max(consts.POINTS_GIT_IF_KILED_MIN, Math.round(score[0])) + " added to your score!");
+    game.player.score += Math.max(Math.round(data[0] * consts.POINTS_GET_IF_KILED), consts.POINTS_GIT_IF_KILED_MIN)
+    game.messager.addMessage("You killed " + data[1] + "!\n" + Math.max(consts.POINTS_GIT_IF_KILED_MIN, Math.round(data[0])) + " added to your score!");
+    game.screenShake(90);
+    console.log(data)
+    game.explotions(new Vector(data[2], data[3]), 80)
   }
 });
 

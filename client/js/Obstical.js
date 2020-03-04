@@ -26,7 +26,7 @@ class Obstical {
   }
 
   collision(player) {
-    this.hp -= 5;
+    // this.hp -= 5;
 
     let delta = Vector.sub(this.pos, player.pos);
     let d = delta.mag();
@@ -51,12 +51,18 @@ class Obstical {
     player.vel.sub(Vector.mul(impulse, im2));
   }
 
+  set(data) {
+    this.pos.set(data.x, data.y);
+    this.vel.set(data.xs, data.ys);
+    this.hp = data.hp;
+  }
+
 
   getPackage() {
     return {
       id: this.id,
-      x: this.x,
-      y: this.y,
+      x: this.pos.x,
+      y: this.pos.y,
       r: this.radius
     }
   }

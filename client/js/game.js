@@ -11,6 +11,8 @@ class Game {
     this.messager = new Message();
     this.viewport_x = clamp(-this.player.pos.x + canvas.width / 2, canvas.width - consts.MAP_WIDTH, 0);
     this.viewport_y = clamp(-this.player.pos.y + canvas.height / 2, canvas.height - consts.MAP_HEIGHT, 0);
+    this.shakeDelta = new Vector(0, 0);
+    this.explotion = [];
   }
 
   init(pack) {
@@ -38,6 +40,8 @@ class Game {
     }
     clearScreen(consts.COLORS.background);
 
+
+
     for (let id of toRemove) {
       delete this.foods[id];
       delete this.bullets[id];
@@ -47,6 +51,11 @@ class Game {
     // create packge to send back
     var pacage = new Object();
 
+    // obstical set
+    for (let obstical of data.OBSTICALS) {
+      this.obsticals[obstical.id].set(obstical);
+    }
+
     // player
     for (let player of players) {
       if (player.id === this.player.id) {
@@ -54,6 +63,8 @@ class Game {
         this.viewport_y = -this.player.pos.y + canvas.height / 2;
         this.viewport_x = clamp(this.viewport_x, canvas.width - consts.MAP_WIDTH, 0);
         this.viewport_y = clamp(this.viewport_y, canvas.height - consts.MAP_HEIGHT, 0);
+        this.viewport_x += this.shakeDelta.x;
+        this.viewport_y += this.shakeDelta.y;
       } else {
         if (rectCol(
             this.player.pos.x,
@@ -66,19 +77,26 @@ class Game {
             player.size)) {
           this.player.setHP(-consts.PLAYER_COLLITION_HP_LOSS);
           if (this.player.HP <= 0) {
-            console.log(player, this.player)
             this.messager.addMessage("You have been killed by " + player.name + "!");
             socket.emit("ImDead", {
               name: this.player.name,
               score: this.player.score,
-              to: player.id
+              to: player.id,
+              x: this.player.pos.x,
+              y: this.player.pos.y,
             })
+
             stopGame()
             break;
           }
           this.player.vel.mul(-2);
         }
       }
+    }
+
+    for (let par of this.explotion) {
+      par.update();
+      par.render(this.viewport_x, this.viewport_y);
     }
 
     // food
@@ -118,15 +136,15 @@ class Game {
       var bul = this.bullets[b];
       if (bul.isFromId != this.player.id) {
         if (rectPoint(this.player.pos.x - this.player.size, this.player.pos.y - this.player.size, this.player.size * 2, this.player.size * 2, bul.x, bul.y)) {
-          console.log("HP: ", this.player.HP);
           this.player.setHP(-8);
           // bul.deadFrom = this.player.id;
           if (this.player.HP <= 0) {
-            this.messager.addMessage("You have been killed by " + bul.from_name + "!");
             socket.emit("ImDead", {
               name: this.player.name,
               score: this.player.score,
-              to: bul.isFromId
+              to: bul.isFromId,
+              x: this.player.pos.x,
+              y: this.player.pos.y,
             })
             stopGame()
           }
@@ -151,19 +169,29 @@ class Game {
       let o = this.obsticals[o_id];
       if (circleCircle(o.pos.x, o.pos.y, o.radius, this.player.pos.x, this.player.pos.y, this.player.size / 2)) {
         o.collision(this.player)
-        socket.emit("obsticalCollision", {
+        pacage.OBSTICAL = {
           id: o.id,
           hp: o.hp,
           x: o.pos.x,
           y: o.pos.y,
           xs: o.vel.x,
           ys: o.vel.y,
-        })
+        }
       }
       for (let b in this.bullets) {
         var bul = this.bullets[b];
+        if (circlePoint(o.pos.x, o.pos.y, o.radius, bul.x, bul.y)) {
+          o.hp -= 8;
+          pacage.REMOVE.push(b);
+        }
       }
       o.update();
+      if (o.hp <= 0) {
+        this.screenShake(o.radius);
+        this.explotions(o.pos, o.radius)
+        pacage.REMOVE.push(o_id);
+        this.player.score += Math.round(o.radius)
+      }
       this.render_obstical(o);
     }
 
@@ -189,7 +217,6 @@ class Game {
     this.player.updatePosition();
 
     pacage.PLAYER = this.player.getPackage();
-    // console.log(pacage)
     socket.emit("returnUpdate", [this.player.id, pacage]);
   }
 
@@ -275,5 +302,32 @@ class Game {
 
   addScore(score) {
     this.player.score += Math.round(score * consts.POINTS_GET_IF_KILED);
+  }
+
+  async screenShake(size) {
+    for (var i = 0; i < 100; i++) {
+      await this.delay(size / 10);
+      this.shakeDelta.random((1 / i) * size);
+    }
+    this.shakeDelta.reset();
+  }
+
+  async explotions(pos, size) {
+    for (var i = 0; i < Math.round(size * 1.9); i++) {
+      this.explotion.push(new Particle(pos.copy().randomWalk(size), size / 7))
+    }
+    console.log(this.explotion.length)
+    await this.delay(1500);
+    for (var i = 0; i < size; i++) {
+      this.explotion.pop(0);
+    }
+  }
+
+  async delay(time) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve("done")
+      }, time);
+    })
   }
 }
