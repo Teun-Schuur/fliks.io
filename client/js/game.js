@@ -187,8 +187,12 @@ class Game {
       }
       o.update();
       if (o.hp <= 0) {
-        this.screenShake(o.radius);
-        this.explotions(o.pos, o.radius)
+        var delta = Vector.sub(o.pos, this.player.pos).abs();
+        if (delta.mag() < WIDTH + HEIGHT) {
+          this.explotions(o.pos, o.radius)
+          var strength = delta.normalize().oneDiv().mul(o.radius / 3).mag();
+          this.screenShake(strength);
+        }
         pacage.REMOVE.push(o_id);
         this.player.score += Math.round(o.radius)
       }

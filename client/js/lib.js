@@ -277,25 +277,45 @@ class Vector {
   add(vec) {
     this.x += vec.x;
     this.y += vec.y;
+    return this;
   }
 
   sub(vec) {
     this.x -= vec.x;
     this.y -= vec.y;
+    return this;
   }
 
   mul(val) {
     this.x *= val;
     this.y *= val;
+    return this;
   }
 
   div(val) {
     this.x /= val;
     this.y /= val;
+    return this;
+  }
+
+  abs() {
+    this.x = Math.abs(this.x);
+    this.y = Math.abs(this.y);
+    return this;
   }
 
   mag() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  sum() {
+    return this.x + this.y;
+  }
+
+  oneDiv() {
+    this.x = 1 / this.x;
+    this.y = 1 / this.y;
+    return this;
   }
 
   normalize() {
