@@ -4,7 +4,7 @@ socket = io();
 socket.on("init", () => {
   console.log("connection made!")
 });
-socket.prefScore = 1000;
+socket.prefScore = 0;
 
 let WIDTH = NaN;
 let HEIGHT = NaN;
